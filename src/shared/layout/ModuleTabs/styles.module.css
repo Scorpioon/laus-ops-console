@@ -1,0 +1,4 @@
+/* src/shared/layout/ModuleTabs/styles.module.css */
+.tabs { display: flex; gap: 4px; padding: 4px 16px; border-bottom: 1px solid #ccc; }
+.tabs button { padding: 4px 8px; background: none; border: none; cursor: pointer; }
+.tabs button.active { font-weight: bold; border-bottom: 2px solid black; }
