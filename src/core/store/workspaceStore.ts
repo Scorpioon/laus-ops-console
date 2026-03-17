@@ -1,9 +1,14 @@
 // src/core/store/workspaceStore.ts
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { Workspace, RawSubmission, DerivedSubmission, WorkspaceSubmission } from '../types/workspace'
+import type { Workspace } from '../types/workspace'
+import type {
+  RawSubmission,
+  DerivedSubmission,
+  WorkspaceSubmission,
+} from '../types/submission'
 
-interface WorkspaceState {
+export interface WorkspaceState {
   activeWorkspace: Workspace | null
   rawSubmissions: RawSubmission[]
   derivedSubmissions: DerivedSubmission[]
@@ -11,20 +16,26 @@ interface WorkspaceState {
   setActiveWorkspace: (ws: Workspace | null) => void
   loadWorkspace: (id: string) => Promise<void>
   saveWorkspace: () => Promise<void>
-  updateSubmission: (id: string, edits: any) => void
+  updateSubmission: (id: string, edits: Record<string, unknown>) => void
 }
 
 export const useWorkspaceStore = create<WorkspaceState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       activeWorkspace: null,
       rawSubmissions: [],
       derivedSubmissions: [],
       workspaceSubmissions: [],
       setActiveWorkspace: (ws) => set({ activeWorkspace: ws }),
-      loadWorkspace: async (id) => { /* TODO */ },
-      saveWorkspace: async () => { /* TODO */ },
-      updateSubmission: (id, edits) => { /* TODO */ },
+      loadWorkspace: async (_id) => {
+        // TODO: implement
+      },
+      saveWorkspace: async () => {
+        // TODO: implement
+      },
+      updateSubmission: (_id, _edits) => {
+        // TODO: implement
+      },
     }),
     { name: 'workspace-storage' }
   )

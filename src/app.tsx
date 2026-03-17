@@ -1,5 +1,5 @@
 // src/app.tsx
-import { useStore } from './core/store'
+import { useUIStore } from './core/store'
 import { TopBar } from './shared/layout/TopBar'
 import { ModuleTabs } from './shared/layout/ModuleTabs'
 import { Footer } from './shared/layout/Footer'
@@ -14,7 +14,7 @@ import { useUnsavedChanges } from './shared/hooks/useUnsavedChanges'
 import './app.css'
 
 function App() {
-  const activeModule = useStore((state) => state.ui.activeModule)
+  const activeModule = useUIStore((state) => state.activeModule)
   useUnsavedChanges()
 
   return (
