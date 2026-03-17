@@ -75,7 +75,7 @@ body {
 
 .main-content {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: hidden; /* changed from auto to hidden to prevent global scroll */
   padding: 1.5rem;
   background: var(--bg2);
 }

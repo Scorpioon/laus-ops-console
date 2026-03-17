@@ -37,7 +37,6 @@ export function SubmissionsTable({ selectedRows, onSelectionChange, onRowClick }
   };
 
   const handleSort = (column: string) => {
-    // For visual only: cycle asc -> desc -> null -> asc
     setSort(prev => {
       if (prev.column !== column) return { column, direction: 'asc' };
       if (prev.direction === 'asc') return { column, direction: 'desc' };
@@ -77,7 +76,6 @@ export function SubmissionsTable({ selectedRows, onSelectionChange, onRowClick }
           </th>
           <th>Pagament</th>
           <th>Material</th>
-          <th>Accions</th>
         </tr>
       </thead>
       <tbody>
@@ -99,21 +97,13 @@ export function SubmissionsTable({ selectedRows, onSelectionChange, onRowClick }
             <td>{row.category}</td>
             <td>
               <StatusBadge status={row.payment === 'ok' ? 'ok' : row.payment === 'pending' ? 'warning' : 'issue'}>
-                {row.payment === 'ok' ? 'Confirmat' : row.payment === 'pending' ? 'Pendent' : 'Error'}
+                {row.payment === 'ok' ? 'confirmat' : row.payment === 'pending' ? 'pendent' : 'error'}
               </StatusBadge>
             </td>
             <td>
               <StatusBadge status={row.material === 'ok' ? 'ok' : row.material === 'warning' ? 'warning' : 'issue'}>
-                {row.material === 'ok' ? 'Rebut' : row.material === 'warning' ? 'Pendent' : 'Falta'}
+                {row.material === 'ok' ? 'rebut' : row.material === 'warning' ? 'pendent' : 'falta'}
               </StatusBadge>
-            </td>
-            <td>
-              <button className={styles.actionIcon} onClick={(e) => e.stopPropagation()}>
-                <i className="bi bi-eye"></i>
-              </button>
-              <button className={styles.actionIcon} onClick={(e) => e.stopPropagation()}>
-                <i className="bi bi-files"></i>
-              </button>
             </td>
           </tr>
         ))}

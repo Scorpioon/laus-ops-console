@@ -1,4 +1,4 @@
-// src/modules/submissions/index.tsx
+﻿// src/modules/submissions/index.tsx
 import { useState } from 'react';
 import { SubmissionsTable } from './components/Table';
 import { Button } from '../../shared/ui/Button';
@@ -11,13 +11,14 @@ const kpiData = {
   total: mockSubmissions.length,
   pendingPayment: mockSubmissions.filter(s => s.payment === 'pending').length,
   missingMaterial: mockSubmissions.filter(s => s.material === 'issue').length,
-  selectedWithoutPrize: 7, // Keeping as is for now
+  selectedWithoutPrize: 7,
 };
 
 export function SubmissionsModule() {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [showDetail, setShowDetail] = useState(false);
   const [detailId, setDetailId] = useState<string | null>(null);
+  const [studentsOnly, setStudentsOnly] = useState(false);
 
   const handleRowClick = (id: string) => {
     setDetailId(id);
@@ -33,16 +34,7 @@ export function SubmissionsModule() {
 
   return (
     <div className={styles.submissions}>
-      {/* Upload Area - compact */}
-      <div className={styles.uploadArea}>
-        <div className={styles.uploadBox}>
-          <i className="bi bi-upload"></i>
-          <span>Arrossega CSV o fes clic</span>
-          <Button variant="secondary">Puja CSV</Button>
-        </div>
-      </div>
-
-      {/* KPI Strip - subtle */}
+      {/* KPI Strip */}
       <div className={styles.kpiStrip}>
         <div className={styles.kpiItem}>
           <span className={styles.kpiValue}>{kpiData.total}</span>
@@ -65,29 +57,41 @@ export function SubmissionsModule() {
       {/* Toolbar */}
       <div className="toolbar">
         <div className="toolbar-group">
-          <Button variant="icon" disabled={selectedRows.length === 0}><i className="bi bi-pencil-square"></i></Button>
-          <Button variant="icon" disabled={selectedRows.length === 0}><i className="bi bi-files"></i></Button>
-          <Button variant="icon" disabled={selectedRows.length === 0}><i className="bi bi-trash"></i></Button>
+          <Button variant="icon" title="Refresh"><i className="bi bi-arrow-repeat"></i></Button>
+          <Button variant="icon" title="Upload CSV"><i className="bi bi-upload"></i></Button>
+          <Button variant="icon" title="Save session"><i className="bi bi-save"></i></Button>
+          <Button variant="icon" title="Close session"><i className="bi bi-x-circle"></i></Button>
         </div>
         <div className="toolbar-group">
-          <Button variant="icon"><i className="bi bi-plus-lg"></i></Button>
-          <Button variant="icon"><i className="bi bi-download"></i></Button>
-          <Button variant="icon"><i className="bi bi-bookmark-plus"></i></Button>
+          <Button variant="icon" title="Delete CSV"><i className="bi bi-file-earmark-x"></i></Button>
+          <Button variant="icon" disabled={selectedRows.length === 0} title="Duplicate selected"><i className="bi bi-files"></i></Button>
+          <Button variant="icon" disabled={selectedRows.length === 0} title="Delete selected"><i className="bi bi-trash"></i></Button>
         </div>
         <div className="toolbar-group">
-          <Button variant="icon"><i className="bi bi-funnel"></i></Button>
-          <Button variant="icon"><i className="bi bi-sort-alpha-down"></i></Button>
+          <Button variant="icon" title="Export"><i className="bi bi-download"></i></Button>
+          <Button variant="icon" title="Filter"><i className="bi bi-funnel"></i></Button>
+          <Button variant="icon" title="Sort"><i className="bi bi-sort-alpha-down"></i></Button>
+          <Button
+            variant="icon"
+            title={studentsOnly ? "Show all students" : "Show only students"}
+            onClick={() => setStudentsOnly(!studentsOnly)}
+            style={{ color: studentsOnly ? 'var(--s-ok)' : undefined }}
+          >
+            <i className="bi bi-person-square"></i>
+          </Button>
         </div>
         <div style={{ flex: 1 }}></div>
         <div className="toolbar-group">
-          <Button variant="icon"><i className="bi bi-arrow-repeat"></i></Button>
-          <Button variant="icon"><i className="bi bi-question-circle"></i></Button>
+          <Button variant="icon" title="Refresh"><i className="bi bi-arrow-repeat"></i></Button>
         </div>
       </div>
 
-      {/* Main area: table + detail panel (flex) */}
+      {/* Main area: table + detail panel */}
       <div className={styles.mainArea}>
-        <div className={styles.tableContainer} style={{ flex: showDetail ? '1 1 50%' : '1 1 100%' }}>
+        <div
+          className={`${styles.tableContainer} ${showDetail ? styles.tableContainerWithDetail : ''}`}
+          style={{ flex: showDetail ? '1 1 50%' : '1 1 100%' }}
+        >
           <SubmissionsTable
             selectedRows={selectedRows}
             onSelectionChange={setSelectedRows}
@@ -98,60 +102,147 @@ export function SubmissionsModule() {
         {showDetail && selectedSubmission && (
           <div className={styles.detailPanel}>
             <div className={styles.detailHeader}>
-              <h3>Detall de la inscripció</h3>
+              <h3>Detall de la inscripciÃƒÂ³</h3>
               <button className={styles.closeBtn} onClick={closeDetail}><i className="bi bi-x-lg"></i></button>
             </div>
             <div className={styles.detailBody}>
-              <div className={styles.detailSection}>
-                <h4>Informació general</h4>
-                <p><strong>Codi:</strong> {selectedSubmission.code}</p>
-                <p><strong>Títol:</strong> {selectedSubmission.title}</p>
-                <p><strong>Categoria:</strong> {selectedSubmission.category}</p>
-              </div>
-
-              <div className={styles.detailSection}>
-                <h4>Estat</h4>
-                <p><strong>Pagament:</strong> <StatusBadge status={selectedSubmission.payment === 'ok' ? 'ok' : selectedSubmission.payment === 'pending' ? 'warning' : 'issue'}>
-                  {selectedSubmission.payment === 'ok' ? 'Confirmat' : selectedSubmission.payment === 'pending' ? 'Pendent' : 'Error'}
-                </StatusBadge></p>
-                <p><strong>Material:</strong> <StatusBadge status={selectedSubmission.material === 'ok' ? 'ok' : selectedSubmission.material === 'warning' ? 'warning' : 'issue'}>
-                  {selectedSubmission.material === 'ok' ? 'Rebut' : selectedSubmission.material === 'warning' ? 'Pendent' : 'Falta'}
-                </StatusBadge></p>
-              </div>
-
-              <div className={styles.detailSection}>
-                <h4>Contacte</h4>
-                <p><strong>Nom:</strong> {selectedSubmission.contactName || '—'}</p>
-                <p><strong>Email:</strong> {selectedSubmission.contactEmail || '—'}</p>
-              </div>
-
-              <div className={styles.detailSection}>
-                <h4>Notes internes</h4>
-                <p className={styles.notes}>{selectedSubmission.internalNotes || '—'}</p>
-              </div>
-
-              <div className={styles.detailSection}>
-                <h4>Enllaços</h4>
-                <div className={styles.linkGroup}>
-                  {selectedSubmission.projectUrl && (
-                    <Button variant="icon" onClick={() => window.open(selectedSubmission.projectUrl, '_blank')}>
-                      <i className="bi bi-box-arrow-up-right"></i>
-                    </Button>
-                  )}
-                  {selectedSubmission.dropboxUrl && (
-                    <Button variant="icon" onClick={() => window.open(selectedSubmission.dropboxUrl, '_blank')}>
-                      <i className="bi bi-dropbox"></i>
-                    </Button>
-                  )}
-                  <Button variant="icon" onClick={() => navigator.clipboard.writeText(selectedSubmission.projectUrl || '')}>
-                    <i className="bi bi-files"></i>
-                  </Button>
+              {/* General Information */}
+              <div className={styles.section}>
+                <h4 className={styles.sectionTitle}>InformaciÃƒÂ³ general</h4>
+                <div className={styles.fieldRow}>
+                  <label>Codi</label>
+                  <div className={styles.fieldValue}>{selectedSubmission.code}</div>
+                  <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+                </div>
+                <div className={styles.fieldRow}>
+                  <label>TÃƒÂ­tol</label>
+                  <div className={styles.fieldValue}>{selectedSubmission.title}</div>
+                  <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+                </div>
+                <div className={styles.fieldRow}>
+                  <label>Categoria</label>
+                  <div className={styles.fieldValue}>{selectedSubmission.category}</div>
+                  <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
                 </div>
               </div>
 
-              <div className={styles.detailActions}>
-                <Button variant="secondary" onClick={() => alert('Edita')}>Edita</Button>
-                <Button variant="secondary" onClick={() => alert('Desa')}>Desa</Button>
+              {/* Status */}
+              <div className={styles.section}>
+                <h4 className={styles.sectionTitle}>Estat</h4>
+                <div className={styles.fieldRow}>
+                  <label>Pagament</label>
+                  <div className={styles.fieldValue}>
+                    <StatusBadge status={selectedSubmission.payment === 'ok' ? 'ok' : selectedSubmission.payment === 'pending' ? 'warning' : 'issue'}>
+                      {selectedSubmission.payment === 'ok' ? 'confirmat' : selectedSubmission.payment === 'pending' ? 'pendent' : 'error'}
+                    </StatusBadge>
+                  </div>
+                  <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+                </div>
+                <div className={styles.fieldRow}>
+                  <label>Material</label>
+                  <div className={styles.fieldValue}>
+                    <StatusBadge status={selectedSubmission.material === 'ok' ? 'ok' : selectedSubmission.material === 'warning' ? 'warning' : 'issue'}>
+                      {selectedSubmission.material === 'ok' ? 'rebut' : selectedSubmission.material === 'warning' ? 'pendent' : 'falta'}
+                    </StatusBadge>
+                  </div>
+                  <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+                </div>
+              </div>
+
+              {/* Contact */}
+              <div className={styles.section}>
+                <h4 className={styles.sectionTitle}>Contacte</h4>
+                <div className={styles.contactGrid}>
+                  <div className={styles.contactField}>
+                    <label>Nom</label>
+                    <span>{selectedSubmission.firstName}</span>
+                    <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+                  </div>
+                  <div className={styles.contactField}>
+                    <label>Cognom</label>
+                    <span>{selectedSubmission.lastName}</span>
+                    <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+                  </div>
+                  <div className={styles.contactField}>
+                    <label>Email</label>
+                    <span><a href={`mailto:${selectedSubmission.email}`}>{selectedSubmission.email}</a></span>
+                    <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+                  </div>
+                  <div className={styles.contactField}>
+                    <label>Estudi / AgÃƒÂ¨ncia</label>
+                    <span>{selectedSubmission.studio}</span>
+                    <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+                  </div>
+                  <div className={styles.contactField}>
+                    <label>TelÃƒÂ¨fon</label>
+                    <span>{selectedSubmission.phone || 'Ã¢â‚¬â€'}</span>
+                    <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+                  </div>
+                  <div className={styles.contactField}>
+                    <label>Web</label>
+                    <span>{selectedSubmission.website ? <a href={selectedSubmission.website} target="_blank" rel="noopener noreferrer">{selectedSubmission.website}</a> : 'Ã¢â‚¬â€'}</span>
+                    <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+                  </div>
+                  <div className={styles.contactField}>
+                    <label>Soci FAD</label>
+                    <span>{selectedSubmission.fadMember ? 'SÃƒÂ­' : 'No'}</span>
+                    <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+                  </div>
+                  <div className={styles.contactField}>
+                    <label>Altres associacions</label>
+                    <span>{selectedSubmission.associationMember ? 'SÃƒÂ­' : 'No'}</span>
+                    <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+                  </div>
+                </div>
+                {selectedSubmission.otherSubmissions.length > 0 && (
+                  <div className={styles.otherSubmissions}>
+                    <label>Altres inscripcions</label>
+                    <div>
+                      {selectedSubmission.otherSubmissions.map(code => (
+                        <button key={code} className={styles.codeLink} onClick={() => handleRowClick(mockSubmissions.find(s => s.code === code)?.id || '')}>
+                          {code}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Dropbox & Digital Material Links */}
+              <div className={styles.section}>
+                <h4 className={styles.sectionTitle}>EnllaÃƒÂ§os</h4>
+                {selectedSubmission.dropboxUrl && (
+                  <div className={styles.linkTag}>
+                    <i className="bi bi-dropbox"></i>
+                    <a href={selectedSubmission.dropboxUrl} target="_blank" rel="noopener noreferrer">Dropbox</a>
+                    <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+                  </div>
+                )}
+                {selectedSubmission.projectUrl && (
+                  <div className={styles.linkTag}>
+                    <i className="bi bi-box-arrow-up-right"></i>
+                    <a href={selectedSubmission.projectUrl} target="_blank" rel="noopener noreferrer">Projecte</a>
+                    <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+                  </div>
+                )}
+              </div>
+
+              {/* Internal Notes */}
+              <div className={styles.section}>
+                <h4 className={styles.sectionTitle}>Notes internes</h4>
+                <div className={styles.notesField}>
+                  {selectedSubmission.internalNotes || 'Ã¢â‚¬â€'}
+                </div>
+                <button className={styles.editIcon}><i className="bi bi-pencil"></i></button>
+              </div>
+
+              {/* Quick Actions */}
+              <div className={styles.quickActions}>
+                <Button variant="secondary" onClick={() => alert('Desa')}><i className="bi bi-save"></i> Desa</Button>
+                <Button variant="secondary" onClick={() => alert('Descartar')}><i className="bi bi-x-circle"></i> Descartar</Button>
+                <Button variant="secondary" onClick={() => window.location.href = `mailto:${selectedSubmission.email}`}><i className="bi bi-envelope"></i> Contacte</Button>
+                <Button variant="secondary" onClick={() => alert('Duplicar')}><i className="bi bi-files"></i> Duplicar</Button>
+                <Button variant="secondary" onClick={() => alert('Eliminar')}><i className="bi bi-trash"></i> Eliminar</Button>
               </div>
             </div>
           </div>

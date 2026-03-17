@@ -48,17 +48,3 @@
   font-family: monospace;
   font-weight: 500;
 }
-
-.actionIcon {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.9rem;
-  margin-right: 0.25rem;
-  color: var(--text2);
-  transition: color 0.1s;
-}
-
-.actionIcon:hover {
-  color: var(--text);
-}

@@ -1,14 +1,15 @@
-import { useUIStore } from '../../../core/store/uiStore'
+﻿import { useUIStore } from '../../../core/store/uiStore'
 import { t } from '../../../core/utils/i18n'
 import styles from './styles.module.css'
 
 const modules = [
-  { id: 'submissions', label: 'nav.submissions' },
-  { id: 'jury', label: 'nav.jury' },
-  { id: 'templates', label: 'nav.templates' },
-  { id: 'insights', label: 'nav.insights' },
-  { id: 'helpdesk', label: 'nav.help' },
-  { id: 'settings', label: 'nav.settings' },
+  { id: 'submissions', label: 'Inscripcions' },
+  { id: 'jury', label: 'Jurats' },
+  { id: 'templates', label: 'Plantilles' },
+  { id: 'insights', label: 'Insights' },
+  { id: 'helpdesk', label: 'Ajuda' },
+  { id: 'laurel', label: 'Premiats' },
+  { id: 'settings', label: 'Config' },
 ]
 
 export function ModuleTabs() {

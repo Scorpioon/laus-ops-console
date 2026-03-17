@@ -1,12 +1,13 @@
-import { useUIStore } from '../../../core/store/uiStore'
-import { useWorkspaceStore } from '../../../core/store/workspaceStore'
-import { t } from '../../../core/utils/i18n'
-import styles from './styles.module.css'
+// src/shared/layout/TopBar/index.tsx
+import { useUIStore } from '../../../core/store/uiStore';
+import { useWorkspaceStore } from '../../../core/store/workspaceStore';
+import { t } from '../../../core/utils/i18n';
+import styles from './styles.module.css';
 
 export function TopBar() {
-  const { language, setLanguage, theme, toggleTheme } = useUIStore()
-  const activeWorkspace = useWorkspaceStore((state) => state.activeWorkspace)
-  const unsavedChanges = activeWorkspace?.unsavedChanges
+  const { language, setLanguage, theme, toggleTheme } = useUIStore();
+  const activeWorkspace = useWorkspaceStore((state) => state.activeWorkspace);
+  const unsavedChanges = activeWorkspace?.unsavedChanges;
 
   return (
     <header className={styles.topbar}>
@@ -43,9 +44,9 @@ export function TopBar() {
           </button>
         </div>
         <button className={styles.themeBtn} onClick={toggleTheme} aria-label={t('topbar.toggleTheme')}>
-          {theme === 'light' ? '🌙' : '☀️'}
+          {theme === 'light' ? <i className="bi bi-sun"></i> : <i className="bi bi-moon-stars"></i>}
         </button>
       </div>
     </header>
-  )
+  );
 }

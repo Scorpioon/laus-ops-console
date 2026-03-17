@@ -1,46 +1,23 @@
-/* src/modules/submissions/Submissions.module.css */
+﻿/* src/modules/submissions/Submissions.module.css */
 .submissions {
-  position: relative;
-  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* fill parent */
   background: var(--bg);
   border-radius: var(--radius);
   padding: 1rem;
-}
-
-.uploadArea {
-  margin-bottom: 0.75rem;
-}
-
-.uploadBox {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  border: 1px solid var(--border2);
-  border-radius: var(--radius);
-  padding: 0.5rem 1rem;
-  color: var(--text3);
-  background: var(--bg2);
-  cursor: pointer;
-  transition: border-color 0.1s;
-  font-size: 0.8rem;
-}
-
-.uploadBox i {
-  font-size: 1rem;
-}
-
-.uploadBox:hover {
-  border-color: var(--border);
+  overflow: hidden; /* prevent global scroll */
 }
 
 .kpiStrip {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   background: var(--bg);
   border: 1px solid var(--border2);
   border-radius: var(--radius);
   padding: 0.5rem 0.75rem;
+  flex-shrink: 0;
 }
 
 .kpiItem {
@@ -71,8 +48,8 @@
 .mainArea {
   display: flex;
   gap: 1rem;
-  align-items: flex-start;
-  margin-top: 1rem;
+  flex: 1;
+  min-height: 0; /* important for flex children to scroll */
 }
 
 .tableContainer {
@@ -81,6 +58,30 @@
   overflow: auto;
   background: var(--bg);
   transition: flex 0.2s;
+  position: relative;
+}
+
+.tableContainerWithDetail {
+  border-right: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* subtle horizontal scroll indicator */
+.tableContainer::after {
+  content: '';
+  position: sticky;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  background: linear-gradient(to left, var(--bg), transparent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.tableContainer:not(:hover)::after {
+  opacity: 0.5;
 }
 
 .detailPanel {
@@ -88,10 +89,12 @@
   max-width: 50%;
   background: var(--bg);
   border: 1px solid var(--border2);
+  border-left: none;
   border-radius: var(--radius);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
   display: flex;
   flex-direction: column;
-  max-height: 70vh;
   overflow: hidden;
 }
 
@@ -102,6 +105,7 @@
   padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--border2);
   background: var(--bg2);
+  flex-shrink: 0;
 }
 
 .detailHeader h3 {
@@ -129,46 +133,187 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
-.detailSection {
+/* sections */
+.section {
   border-bottom: 1px solid var(--border3);
-  padding-bottom: 0.75rem;
+  padding-bottom: 1rem;
 }
 
-.detailSection h4 {
+.sectionTitle {
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
   color: var(--text2);
+  letter-spacing: 0.02em;
+  margin: 0 0 0.75rem 0;
+}
+
+.fieldRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+.fieldRow label {
+  width: 80px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text2);
+  text-transform: uppercase;
   letter-spacing: 0.02em;
 }
 
-.detailSection p {
-  margin-bottom: 0.4rem;
+.fieldValue {
+  flex: 1;
   font-size: 0.85rem;
-  line-height: 1.4;
+  color: var(--text);
+  min-width: 0;
+  word-break: break-word;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  transition: border-color 0.1s;
 }
 
-.detailSection .notes {
+.fieldValue:hover {
+  border-color: var(--border2);
   background: var(--bg2);
-  padding: 0.5rem;
+}
+
+.editIcon {
+  background: none;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  padding: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.editIcon:hover {
+  color: var(--text);
+}
+
+/* contact grid */
+.contactGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.contactField {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contactField label {
+  width: 70px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text3);
+  text-transform: uppercase;
+}
+
+.contactField span {
+  flex: 1;
+  font-size: 0.85rem;
+  color: var(--text);
+  min-width: 0;
+  word-break: break-word;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid transparent;
   border-radius: var(--radius);
+}
+
+.contactField span:hover {
+  border-color: var(--border2);
+  background: var(--bg2);
+}
+
+.otherSubmissions {
+  margin-top: 0.75rem;
+}
+
+.otherSubmissions label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text3);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.otherSubmissions div {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.codeLink {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.codeLink:hover {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+/* link tags */
+.linkTag {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 0.2rem 0.5rem;
+  width: fit-content;
+}
+
+.linkTag i {
+  color: var(--text3);
+  font-size: 0.9rem;
+}
+
+.linkTag a {
+  font-size: 0.85rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.linkTag a:hover {
+  text-decoration: underline;
+}
+
+/* notes field */
+.notesField {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 0.5rem;
   font-size: 0.8rem;
   color: var(--text2);
+  min-height: 60px;
+  margin-bottom: 0.5rem;
 }
 
-.linkGroup {
+/* quick actions */
+.quickActions {
   display: flex;
   gap: 0.5rem;
-  align-items: center;
-}
-
-.detailActions {
-  display: flex;
-  gap: 0.5rem;
+  flex-wrap: wrap;
   justify-content: flex-end;
   margin-top: 0.5rem;
 }

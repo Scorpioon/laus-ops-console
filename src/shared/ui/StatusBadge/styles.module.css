@@ -1,15 +1,16 @@
-/* src/shared/ui/StatusBadge/styles.module.css */
+﻿/* src/shared/ui/StatusBadge/styles.module.css */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.65rem;
-  font-weight: 500;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.55rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   border-radius: var(--radius);
-  border: 1px solid transparent;
+  border: 1px solid;
+  line-height: 1.2;
 }
 
 .ok {
