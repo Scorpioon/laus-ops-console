@@ -86,8 +86,8 @@ export function SubmissionsModule() {
       </div>
 
       {/* Main area: table + detail panel (flex) */}
-      <div className={styles.mainArea} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-        <div className={styles.tableContainer} style={{ flex: showDetail ? '1 1 50%' : '1 1 100%', transition: 'flex 0.2s' }}>
+      <div className={styles.mainArea}>
+        <div className={styles.tableContainer} style={{ flex: showDetail ? '1 1 50%' : '1 1 100%' }}>
           <SubmissionsTable
             selectedRows={selectedRows}
             onSelectionChange={setSelectedRows}
@@ -96,25 +96,62 @@ export function SubmissionsModule() {
         </div>
 
         {showDetail && selectedSubmission && (
-          <div className={styles.detailPanel} style={{ flex: '0 0 50%', maxWidth: '50%' }}>
+          <div className={styles.detailPanel}>
             <div className={styles.detailHeader}>
               <h3>Detall de la inscripció</h3>
               <button className={styles.closeBtn} onClick={closeDetail}><i className="bi bi-x-lg"></i></button>
             </div>
             <div className={styles.detailBody}>
-              <p><strong>Codi:</strong> {selectedSubmission.code}</p>
-              <p><strong>Títol:</strong> {selectedSubmission.title}</p>
-              <p><strong>Categoria:</strong> {selectedSubmission.category}</p>
-              <p><strong>Estat material:</strong> <StatusBadge status={selectedSubmission.material === 'ok' ? 'ok' : selectedSubmission.material === 'warning' ? 'warning' : 'issue'}>
-                {selectedSubmission.material === 'ok' ? 'Rebut' : selectedSubmission.material === 'warning' ? 'Pendent' : 'Falta'}
-              </StatusBadge></p>
-              <p><strong>Pagament:</strong> <StatusBadge status={selectedSubmission.payment === 'ok' ? 'ok' : selectedSubmission.payment === 'pending' ? 'warning' : 'issue'}>
-                {selectedSubmission.payment === 'ok' ? 'Confirmat' : selectedSubmission.payment === 'pending' ? 'Pendent' : 'Error'}
-              </StatusBadge></p>
-              <div className={styles.quickActions}>
-                <Button variant="icon"><i className="bi bi-box-arrow-up-right"></i></Button>
-                <Button variant="icon"><i className="bi bi-files"></i></Button>
-                <Button variant="icon"><i className="bi bi-pencil"></i></Button>
+              <div className={styles.detailSection}>
+                <h4>Informació general</h4>
+                <p><strong>Codi:</strong> {selectedSubmission.code}</p>
+                <p><strong>Títol:</strong> {selectedSubmission.title}</p>
+                <p><strong>Categoria:</strong> {selectedSubmission.category}</p>
+              </div>
+
+              <div className={styles.detailSection}>
+                <h4>Estat</h4>
+                <p><strong>Pagament:</strong> <StatusBadge status={selectedSubmission.payment === 'ok' ? 'ok' : selectedSubmission.payment === 'pending' ? 'warning' : 'issue'}>
+                  {selectedSubmission.payment === 'ok' ? 'Confirmat' : selectedSubmission.payment === 'pending' ? 'Pendent' : 'Error'}
+                </StatusBadge></p>
+                <p><strong>Material:</strong> <StatusBadge status={selectedSubmission.material === 'ok' ? 'ok' : selectedSubmission.material === 'warning' ? 'warning' : 'issue'}>
+                  {selectedSubmission.material === 'ok' ? 'Rebut' : selectedSubmission.material === 'warning' ? 'Pendent' : 'Falta'}
+                </StatusBadge></p>
+              </div>
+
+              <div className={styles.detailSection}>
+                <h4>Contacte</h4>
+                <p><strong>Nom:</strong> {selectedSubmission.contactName || '—'}</p>
+                <p><strong>Email:</strong> {selectedSubmission.contactEmail || '—'}</p>
+              </div>
+
+              <div className={styles.detailSection}>
+                <h4>Notes internes</h4>
+                <p className={styles.notes}>{selectedSubmission.internalNotes || '—'}</p>
+              </div>
+
+              <div className={styles.detailSection}>
+                <h4>Enllaços</h4>
+                <div className={styles.linkGroup}>
+                  {selectedSubmission.projectUrl && (
+                    <Button variant="icon" onClick={() => window.open(selectedSubmission.projectUrl, '_blank')}>
+                      <i className="bi bi-box-arrow-up-right"></i>
+                    </Button>
+                  )}
+                  {selectedSubmission.dropboxUrl && (
+                    <Button variant="icon" onClick={() => window.open(selectedSubmission.dropboxUrl, '_blank')}>
+                      <i className="bi bi-dropbox"></i>
+                    </Button>
+                  )}
+                  <Button variant="icon" onClick={() => navigator.clipboard.writeText(selectedSubmission.projectUrl || '')}>
+                    <i className="bi bi-files"></i>
+                  </Button>
+                </div>
+              </div>
+
+              <div className={styles.detailActions}>
+                <Button variant="secondary" onClick={() => alert('Edita')}>Edita</Button>
+                <Button variant="secondary" onClick={() => alert('Desa')}>Desa</Button>
               </div>
             </div>
           </div>

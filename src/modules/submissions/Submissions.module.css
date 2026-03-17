@@ -69,6 +69,9 @@
 }
 
 .mainArea {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
   margin-top: 1rem;
 }
 
@@ -81,6 +84,8 @@
 }
 
 .detailPanel {
+  flex: 0 0 50%;
+  max-width: 50%;
   background: var(--bg);
   border: 1px solid var(--border2);
   border-radius: var(--radius);
@@ -122,15 +127,48 @@
   padding: 1rem;
   flex: 1;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-.detailBody p {
-  margin-bottom: 0.75rem;
+.detailSection {
+  border-bottom: 1px solid var(--border3);
+  padding-bottom: 0.75rem;
+}
+
+.detailSection h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+.detailSection p {
+  margin-bottom: 0.4rem;
   font-size: 0.85rem;
+  line-height: 1.4;
 }
 
-.quickActions {
+.detailSection .notes {
+  background: var(--bg2);
+  padding: 0.5rem;
+  border-radius: var(--radius);
+  font-size: 0.8rem;
+  color: var(--text2);
+}
+
+.linkGroup {
   display: flex;
   gap: 0.5rem;
-  margin-top: 1rem;
+  align-items: center;
+}
+
+.detailActions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
 }
