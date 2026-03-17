@@ -1,4 +1,4 @@
-/* src/modules/submissions/components/Table/styles.module.css */
+﻿/* src/modules/submissions/components/Table/styles.module.css - v0.4.2 */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -31,12 +31,12 @@
 }
 
 .table tbody tr.selected {
-  background: var(--sel-bg);
-  color: var(--sel-fg);
+  background: #e0f2fe;
+  color: var(--text);
 }
 
 .table tbody tr.selected td {
-  color: var(--sel-fg);
+  color: var(--text);
 }
 
 .checkboxCell {

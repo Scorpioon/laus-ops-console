@@ -1,4 +1,4 @@
-import { useUIStore } from '../store/uiStore'
+﻿import { useUIStore } from '../store/uiStore'
 
 const translations: Record<'ca' | 'es', Record<string, string>> = {
   ca: {
@@ -7,6 +7,7 @@ const translations: Record<'ca' | 'es', Record<string, string>> = {
     'nav.templates': 'Plantilles',
     'nav.insights': 'Insights',
     'nav.help': 'Ajuda',
+    'nav.laurel': 'Premiats',
     'nav.settings': 'Configuració',
     'topbar.noWorkspace': 'Cap espai de treball actiu',
     'topbar.toggleTheme': 'Canvia tema',
@@ -24,6 +25,7 @@ const translations: Record<'ca' | 'es', Record<string, string>> = {
     'nav.templates': 'Plantillas',
     'nav.insights': 'Insights',
     'nav.help': 'Ayuda',
+    'nav.laurel': 'Premiados',
     'nav.settings': 'Configuración',
     'topbar.noWorkspace': 'Sin espacio de trabajo activo',
     'topbar.toggleTheme': 'Cambiar tema',
