@@ -1,6 +1,6 @@
-// src/shared/layout/ModuleTabs/index.tsx
 import { useUIStore } from '../../../core/store/uiStore'
 import { t } from '../../../core/utils/i18n'
+import styles from './styles.module.css'
 
 const modules = [
   { id: 'submissions', label: 'nav.submissions' },
@@ -14,12 +14,16 @@ const modules = [
 export function ModuleTabs() {
   const { activeModule, setActiveModule } = useUIStore()
   return (
-    <div className="tabs">
-      {modules.map(m => (
-        <button key={m.id} className={activeModule === m.id ? 'active' : ''} onClick={() => setActiveModule(m.id)}>
+    <nav className={styles.tabs}>
+      {modules.map((m) => (
+        <button
+          key={m.id}
+          className={`${styles.tab} ${activeModule === m.id ? styles.active : ''}`}
+          onClick={() => setActiveModule(m.id)}
+        >
           {t(m.label)}
         </button>
       ))}
-    </div>
+    </nav>
   )
 }

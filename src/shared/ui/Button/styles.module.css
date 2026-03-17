@@ -1,1 +1,56 @@
-/* src/shared/ui/Button/styles.module.css */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.1s;
+  white-space: nowrap;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.primary {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--text2);
+  border-color: var(--text2);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--text2);
+  border-color: var(--border2);
+}
+
+.secondary:hover:not(:disabled) {
+  background: var(--bg2);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.icon {
+  padding: 0.25rem;
+  background: transparent;
+  border: none;
+  color: var(--text2);
+  font-size: 1.1rem;
+}
+
+.icon:hover:not(:disabled) {
+  color: var(--text);
+}

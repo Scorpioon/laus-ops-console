@@ -1,9 +1,13 @@
+import { ReactNode } from 'react'
 import styles from './styles.module.css'
 
-type StatusBadgeProps = {
-  status: string
+type StatusType = 'ok' | 'warning' | 'issue' | 'info' | 'neutral'
+
+interface StatusBadgeProps {
+  status: StatusType
+  children: ReactNode
 }
 
-export const StatusBadge = ({ status }: StatusBadgeProps) => {
-  return <span className={styles.badge}>{status}</span>
+export const StatusBadge = ({ status, children }: StatusBadgeProps) => {
+  return <span className={`${styles.badge} ${styles[status]}`}>{children}</span>
 }

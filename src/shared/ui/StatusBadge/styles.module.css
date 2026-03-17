@@ -1,1 +1,42 @@
-/* src/shared/ui/StatusBadge/styles.module.css */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+}
+
+.ok {
+  background: var(--s-ok-bg);
+  color: var(--s-ok);
+  border-color: var(--s-ok);
+}
+
+.warning {
+  background: var(--s-warn-bg);
+  color: var(--s-warn);
+  border-color: var(--s-warn);
+}
+
+.issue {
+  background: var(--s-des-bg);
+  color: var(--s-des);
+  border-color: var(--s-des);
+}
+
+.info {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #0369a1;
+}
+
+.neutral {
+  background: var(--bg2);
+  color: var(--text3);
+  border-color: var(--border2);
+}

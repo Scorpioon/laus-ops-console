@@ -1,0 +1,148 @@
+.submissions {
+  position: relative;
+  min-height: 100%;
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.uploadArea {
+  margin-bottom: 1.5rem;
+}
+
+.uploadBox {
+  border: 2px dashed var(--border2);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+  color: var(--text3);
+  background: var(--bg2);
+  cursor: pointer;
+  transition: border-color 0.1s;
+}
+
+.uploadBox:hover {
+  border-color: var(--border);
+}
+
+.kpiStrip {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+}
+
+.kpiItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-right: 1rem;
+  border-right: 1px solid var(--border2);
+}
+
+.kpiItem:last-child {
+  border-right: none;
+}
+
+.kpiValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.kpiLabel {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--text3);
+  letter-spacing: 0.05em;
+}
+
+.actionBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.leftActions, .rightActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tableContainer {
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  overflow: auto;
+  background: var(--bg);
+}
+
+.detailPanel {
+  position: fixed;
+  top: 3.5rem;
+  right: 0;
+  width: 350px;
+  height: calc(100vh - 3.5rem);
+  background: var(--bg);
+  border-left: 1px solid var(--border2);
+  box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.2s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.detailHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border2);
+  background: var(--bg2);
+}
+
+.detailHeader h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text3);
+  padding: 0 0.5rem;
+}
+
+.closeBtn:hover {
+  color: var(--text);
+}
+
+.detailBody {
+  padding: 1rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.detailBody p {
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.quickActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}

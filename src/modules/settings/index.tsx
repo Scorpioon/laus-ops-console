@@ -1,2 +1,5 @@
-// src/modules/settings/index.tsx
-export function SettingsModule() { return <div>Settings Module (placeholder)</div> }
+import { SettingsPanel } from './components/SettingsPanel'
+
+export function SettingsModule() {
+  return <SettingsPanel />
+}

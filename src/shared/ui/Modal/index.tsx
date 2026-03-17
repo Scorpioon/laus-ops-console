@@ -1,20 +1,31 @@
-import type { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 import styles from './styles.module.css'
 
-type ModalProps = {
-    isOpen: boolean
-    onClose?: () => void
-    children: ReactNode
+interface ModalProps {
+  isOpen: boolean
+  onClose?: () => void
+  children: ReactNode
 }
 
 export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
-    if (!isOpen) return null
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
 
-    return (
-        <div className={styles.overlay} onClick={onClose}>
-            <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-                {children}
-            </div>
-        </div>
-    )
+  if (!isOpen) return null
+
+  return (
+    <div className={styles.overlay} onClick={onClose}>
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+        {children}
+      </div>
+    </div>
+  )
 }

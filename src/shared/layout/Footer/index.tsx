@@ -1,8 +1,13 @@
-// src/shared/layout/Footer/index.tsx
+import styles from './styles.module.css'
+
 export function Footer() {
   return (
-    <footer className="footer">
-      made with ♥ by collapsecreative para Aina, Pao, Mireia, Eva y el GOAT.
+    <footer className={styles.footer}>
+      made with <span style={{ color: '#e44' }}>♥</span> by{' '}
+      <a href="https://collapsecreative.com" target="_blank" rel="noopener noreferrer">
+        collapsecreative
+      </a>{' '}
+      para Aina, Pao, Mireia, Eva y el GOAT.
     </footer>
   )
 }
