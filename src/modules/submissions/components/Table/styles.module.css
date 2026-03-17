@@ -1,25 +1,28 @@
+/* src/modules/submissions/components/Table/styles.module.css */
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 }
 
 .table th {
   text-align: left;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 0.75rem;
   background: var(--bg2);
-  color: var(--text3);
+  color: var(--text2);
   font-weight: 600;
   font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
   border-bottom: 1px solid var(--border2);
+  white-space: nowrap;
 }
 
 .table td {
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--border3);
   color: var(--text);
+  white-space: nowrap;
 }
 
 .table tbody tr:hover {
@@ -41,12 +44,17 @@
   text-align: center;
 }
 
+.codeCell {
+  font-family: monospace;
+  font-weight: 500;
+}
+
 .actionIcon {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.1rem;
-  margin-right: 0.5rem;
+  font-size: 0.9rem;
+  margin-right: 0.25rem;
   color: var(--text2);
   transition: color 0.1s;
 }

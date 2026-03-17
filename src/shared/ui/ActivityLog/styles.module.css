@@ -1,6 +1,7 @@
+/* src/shared/ui/ActivityLog/styles.module.css */
 .log {
   padding: 1rem;
-  background: var(--bg2);
+  background: var(--bg);
   border: 1px solid var(--border2);
   border-radius: var(--radius);
   font-size: 0.75rem;

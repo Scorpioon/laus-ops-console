@@ -1,30 +1,28 @@
-import { useState } from 'react'
-import { Button } from '../../../shared/ui/Button'
-import { useUIStore } from '../../../core/store/uiStore'
-import styles from './SettingsPanel.module.css'
+import { useState } from 'react';
+import { Button } from '../../../shared/ui/Button';
+import { useUIStore } from '../../../core/store/uiStore';
+import styles from './SettingsPanel.module.css';
 
 export const SettingsPanel = () => {
-  const { language, setLanguage, theme, toggleTheme } = useUIStore()
-  const [hasChanges, setHasChanges] = useState(false)
-  const [showReview, setShowReview] = useState(false)
+  const { language, setLanguage, theme, toggleTheme } = useUIStore();
+  const [hasChanges, setHasChanges] = useState(false);
 
   // Mock settings state
   const [settings, setSettings] = useState({
     exportFormat: 'clean',
     laurelEnabled: true,
     laurelFrequency: 'normal',
-  })
+  });
 
   const handleChange = (key: string, value: any) => {
-    setSettings(prev => ({ ...prev, [key]: value }))
-    setHasChanges(true)
-  }
+    setSettings(prev => ({ ...prev, [key]: value }));
+    setHasChanges(true);
+  };
 
   const handleApply = () => {
     // Here you would persist settings
-    setHasChanges(false)
-    setShowReview(false)
-  }
+    setHasChanges(false);
+  };
 
   const handleCancel = () => {
     // Revert changes
@@ -32,10 +30,9 @@ export const SettingsPanel = () => {
       exportFormat: 'clean',
       laurelEnabled: true,
       laurelFrequency: 'normal',
-    })
-    setHasChanges(false)
-    setShowReview(false)
-  }
+    });
+    setHasChanges(false);
+  };
 
   return (
     <div className={styles.settingsPanel}>
@@ -130,5 +127,5 @@ export const SettingsPanel = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
