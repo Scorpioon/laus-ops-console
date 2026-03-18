@@ -1,6 +1,6 @@
-// src/modules/submissions/components/Inspector/ContactColumn.tsx - v0.4.3a
-// Col 2: two contact blocks + ALTRES INSCRIPCIONS 3-col badge grid.
-// Clicking a badge calls onSelectId - inspector updates in-place, no remount.
+// Inspector/ContactColumn.tsx - v0.4.3b
+// Col 2: two contact blocks + ALTRES INSCRIPCIONS compact chip grid.
+// Clicking a badge navigates to that record in-place - no remount.
 import { mockSubmissions, type MockSubmission } from '../../mockData'
 import styles from './styles.module.css'
 
@@ -14,7 +14,7 @@ function CField({ label, value }: { label: string; value: string }) {
     <div className={styles.contactField}>
       <span className={styles.cfLabel}>{label}</span>
       <span className={styles.cfVal}>{value || '\u2014'}</span>
-      <button className={styles.editBtn} aria-label="Edit">
+      <button className={styles.editBtn} aria-label="Edita">
         <i className="bi bi-pencil" aria-hidden="true"></i>
       </button>
     </div>
@@ -26,25 +26,24 @@ export function ContactColumn({ submission, onSelectId }: Props) {
     <div className={styles.contactCol}>
       <span className={styles.colLabel}>Contacte</span>
 
-      {/* Primary contact block */}
+      {/* Primary block */}
       <div className={styles.contactBlock}>
-        <CField label="Nom"      value={submission.firstName} />
-        <CField label="Email"    value={submission.email} />
-        <CField label="Tel."     value={submission.phone ?? ''} />
-        <CField label="Soci FAD" value={submission.fadMember ? 'Si' : 'No'} />
+        <CField label="Nom"       value={submission.firstName} />
+        <CField label="Email"     value={submission.email} />
+        <CField label="Tel\u00e8fon"  value={submission.phone ?? ''} />
+        <CField label="Soci FAD"  value={submission.fadMember ? 'S\u00ed' : 'No'} />
       </div>
 
-      {/* Secondary contact block */}
+      {/* Secondary block */}
       <div className={styles.contactBlock}>
-        <CField label="Cognom" value={submission.lastName} />
-        <CField label="Estudi" value={submission.studio} />
-        <CField label="Web"    value={submission.website ?? ''} />
-        <CField label="Altres" value={submission.associationMember ? 'Si' : 'No'} />
+        <CField label="Cognom"    value={submission.lastName} />
+        <CField label="Estudi"    value={submission.studio} />
+        <CField label="Web"       value={submission.website ?? ''} />
+        <CField label="Altres"    value={submission.associationMember ? 'S\u00ed' : 'No'} />
       </div>
 
-      {/* ALTRES INSCRIPCIONS: 3-col badge grid.
-          Clicking navigates to the linked record inside the inspector.
-          Does NOT unmount the inspector - only updates selectedId. */}
+      {/* ALTRES INSCRIPCIONS: compact 3-col chip grid.
+          Clicking navigates in-place - inspector does not remount. */}
       {submission.otherSubmissions.length > 0 && (
         <div className={styles.altresSection}>
           <span className={styles.altresLabel}>Altres inscripcions</span>
@@ -56,9 +55,9 @@ export function ContactColumn({ submission, onSelectId }: Props) {
                   key={code}
                   className={styles.codeBadge}
                   onClick={() => onSelectId(linked.id)}
-                  title={code}
+                  title={`Obre ${code}`}
                 >
-                  <i className="bi bi-arrow-right-short" aria-hidden="true"></i>
+                  <i className="bi bi-arrow-right-short" style={{ fontSize: '9px' }} aria-hidden="true"></i>
                   {code}
                 </button>
               ) : null

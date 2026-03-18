@@ -1,5 +1,5 @@
-// src/modules/submissions/index.tsx - v0.4.3a
-// Old inline detailPanel block removed. Inspector component wired in its place.
+// src/modules/submissions/index.tsx - v0.4.3b
+// KPI strip restored. Inspector wired in place of old detailPanel.
 import { useState } from 'react'
 import { SubmissionsTable } from './components/Table'
 import { Button } from '../../shared/ui/Button'
@@ -7,20 +7,26 @@ import { Inspector } from './components/Inspector'
 import { mockSubmissions } from './mockData'
 import styles from './Submissions.module.css'
 
+// Local KPI computation - static from mockData for now, no store needed
+const kpis = {
+  total:           mockSubmissions.length,
+  pendingPayment:  mockSubmissions.filter(s => s.payment !== 'ok').length,
+  pendingMaterial: mockSubmissions.filter(s => s.material !== 'ok').length,
+  noAward:         7, // placeholder - wired to award tracking in v0.4.3c
+}
+
 export function SubmissionsModule() {
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [showDetail,   setShowDetail]   = useState(false)
   const [detailId,     setDetailId]     = useState<string | null>(null)
   const [studentsOnly, setStudentsOnly] = useState(false)
 
-  // Open inspector - does not remount if already open
   const handleRowClick = (id: string) => {
     setDetailId(id)
     setShowDetail(true)
   }
 
-  // Navigate to a linked record inside the inspector (ALTRES INSCRIPCIONS).
-  // Updates detailId in-place. Inspector component does NOT unmount.
+  // Navigate linked record in inspector without remounting it
   const handleSelectId = (id: string) => {
     setDetailId(id)
   }
@@ -36,6 +42,30 @@ export function SubmissionsModule() {
 
   return (
     <div className={styles.submissions}>
+
+      {/* KPI Strip */}
+      <div className={styles.kpiStrip}>
+        <div className={styles.kpi}>
+          <span className={styles.kpiVal}>{kpis.total}</span>
+          <span className={styles.kpiLbl}>Total</span>
+        </div>
+        <div className={styles.kpi}>
+          <span className={`${styles.kpiVal} ${kpis.pendingPayment > 0 ? styles.kpiWarn : styles.kpiOk}`}>
+            {kpis.pendingPayment}
+          </span>
+          <span className={styles.kpiLbl}>Pagament pendent</span>
+        </div>
+        <div className={styles.kpi}>
+          <span className={`${styles.kpiVal} ${kpis.pendingMaterial > 0 ? styles.kpiWarn : styles.kpiOk}`}>
+            {kpis.pendingMaterial}
+          </span>
+          <span className={styles.kpiLbl}>Material pendent</span>
+        </div>
+        <div className={styles.kpi}>
+          <span className={styles.kpiVal}>{kpis.noAward}</span>
+          <span className={styles.kpiLbl}>Sense premi</span>
+        </div>
+      </div>
 
       {/* Toolbar */}
       <div className="toolbar">
@@ -54,18 +84,10 @@ export function SubmissionsModule() {
           <Button variant="icon" title="Delete CSV">
             <i className="bi bi-file-earmark-x"></i>
           </Button>
-          <Button
-            variant="icon"
-            disabled={selectedRows.length === 0}
-            title="Duplicate selected"
-          >
+          <Button variant="icon" disabled={selectedRows.length === 0} title="Duplicate selected">
             <i className="bi bi-files"></i>
           </Button>
-          <Button
-            variant="icon"
-            disabled={selectedRows.length === 0}
-            title="Delete selected"
-          >
+          <Button variant="icon" disabled={selectedRows.length === 0} title="Delete selected">
             <i className="bi bi-trash"></i>
           </Button>
         </div>
@@ -78,7 +100,7 @@ export function SubmissionsModule() {
           </Button>
           <Button
             variant="icon"
-            title={studentsOnly ? 'Show all' : 'Students only'}
+            title={studentsOnly ? 'Mostra tots' : 'Estudiants'}
             onClick={() => setStudentsOnly(!studentsOnly)}
             className={studentsOnly ? styles.activeToggle : ''}
           >
@@ -87,7 +109,7 @@ export function SubmissionsModule() {
         </div>
       </div>
 
-      {/* Main area */}
+      {/* Main area: table + inspector */}
       <div className={styles.mainArea}>
         <div
           className={`${styles.tableContainer} ${showDetail ? styles.tableContainerWithDetail : ''}`}
@@ -99,7 +121,6 @@ export function SubmissionsModule() {
           />
         </div>
 
-        {/* Inspector replaces old detailPanel */}
         {showDetail && selectedSubmission && (
           <Inspector
             submission={selectedSubmission}

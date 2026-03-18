@@ -1,6 +1,7 @@
-// src/modules/submissions/components/Inspector/StatusColumn.tsx - v0.4.3a
-// Col 3: PAGAMENT/MATERIAL click-to-dropdown, PREMIADO toggle, PREMIO selector.
-// Workflow-only local state. No write-back to RawSubmission (deferred to v0.4.3b).
+// Inspector/StatusColumn.tsx - v0.4.3b
+// Col 3: PAGAMENT/MATERIAL click-to-dropdown (dark-bg badges),
+//        PREMIAT toggle, PREMIO selector.
+// Workflow-only state. No write-back to RawSubmission (v0.4.3c).
 import { useState } from 'react'
 import { type MockSubmission } from '../../mockData'
 import styles from './styles.module.css'
@@ -32,7 +33,7 @@ const PREMIO_OPTS = [
   'Laus Aporta',
 ]
 
-function badgeClass(val: PaymentVal | MaterialVal): string {
+const badgeClass = (val: PaymentVal | MaterialVal): string => {
   if (val === 'ok')      return styles.ok
   if (val === 'pending') return styles.warn
   if (val === 'warning') return styles.warn
@@ -63,7 +64,7 @@ export function StatusColumn({ submission }: Props) {
             onClick={() => { setPayOpen(!payOpen); setMatOpen(false) }}
           >
             {payLabel(payment)}
-            <i className="bi bi-chevron-down" style={{ fontSize: '7px' }} aria-hidden="true"></i>
+            <i className="bi bi-chevron-down" style={{ fontSize: '6px' }} aria-hidden="true"></i>
           </button>
           {payOpen && (
             <div className={styles.statusDropdown}>
@@ -90,7 +91,7 @@ export function StatusColumn({ submission }: Props) {
             onClick={() => { setMatOpen(!matOpen); setPayOpen(false) }}
           >
             {matLabel(material)}
-            <i className="bi bi-chevron-down" style={{ fontSize: '7px' }} aria-hidden="true"></i>
+            <i className="bi bi-chevron-down" style={{ fontSize: '6px' }} aria-hidden="true"></i>
           </button>
           {matOpen && (
             <div className={styles.statusDropdown}>
@@ -108,7 +109,7 @@ export function StatusColumn({ submission }: Props) {
         </div>
       </div>
 
-      {/* PREMIADO - workflow-only flag */}
+      {/* PREMIAT - workflow flag */}
       <div className={styles.statusRow}>
         <span className={styles.statusRowLabel}>Premiat</span>
         <div className={styles.premiadoRow}>
@@ -116,12 +117,12 @@ export function StatusColumn({ submission }: Props) {
             className={`${styles.toggleBtn} ${premiado ? styles.toggled : ''}`}
             onClick={() => setPremiado(!premiado)}
           >
-            {premiado ? 'Si' : 'No'}
+            {premiado ? 'S\u00ed' : 'No'}
           </button>
         </div>
       </div>
 
-      {/* PREMIO - visible only when premiado is true */}
+      {/* PREMIO - visible only when premiado */}
       {premiado && (
         <div className={styles.statusRow}>
           <span className={styles.statusRowLabel}>Premio</span>

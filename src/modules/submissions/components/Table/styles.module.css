@@ -1,4 +1,4 @@
-﻿/* src/modules/submissions/components/Table/styles.module.css - v0.4.2 */
+/* src/modules/submissions/components/Table/styles.module.css - v0.4.3b */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -9,20 +9,22 @@
   text-align: left;
   padding: 0.5rem 0.75rem;
   background: var(--bg2);
-  color: var(--text2);
-  font-weight: 600;
-  font-size: 0.7rem;
+  color: var(--text3);
+  font-weight: 400;
+  font-size: 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.14em;
   border-bottom: 1px solid var(--border2);
   white-space: nowrap;
+  user-select: none;
 }
 
 .table td {
-  padding: 0.5rem 0.75rem;
+  padding: 0.45rem 0.75rem;
   border-bottom: 1px solid var(--border3);
   color: var(--text);
   white-space: nowrap;
+  vertical-align: middle;
 }
 
 .table tbody tr:hover {
@@ -30,9 +32,10 @@
   cursor: pointer;
 }
 
+/* Selected row: system left-accent + subtle bg */
 .table tbody tr.selected {
-  background: #e0f2fe;
-  color: var(--text);
+  background: var(--bg3);
+  box-shadow: inset 3px 0 0 var(--text);
 }
 
 .table tbody tr.selected td {
@@ -42,9 +45,12 @@
 .checkboxCell {
   width: 2rem;
   text-align: center;
+  padding-left: 0.75rem;
 }
 
 .codeCell {
   font-family: monospace;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--text2);
 }

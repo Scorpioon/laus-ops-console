@@ -1,11 +1,11 @@
+// src/shared/ui/ActivityLog/index.tsx - v0.4.3b
 import styles from './styles.module.css'
 
 export const ActivityLog = () => {
-  // Mock entries
   const entries = [
-    { time: '10:32', user: 'Aina', action: 'edició de camp "Pagament confirmat" a LAUS-0123' },
-    { time: '10:15', user: 'Pao', action: 'resolució de discrepància mantingut valor A' },
-    { time: '09:47', user: 'Mireia', action: 'creació de nova fila' },
+    { time: '10:32', user: 'Aina',   action: 'edici\u00f3 de camp "Pagament confirmat" a LAUS-0123' },
+    { time: '10:15', user: 'Pao',    action: 'resoluci\u00f3 de discrepÃ n\u00e0cia, mantingut valor A' },
+    { time: '09:47', user: 'Mireia', action: 'creaci\u00f3 de nova fila' },
   ]
 
   return (

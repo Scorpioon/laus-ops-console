@@ -1,5 +1,6 @@
-// src/modules/submissions/components/Inspector/LinksRow.tsx - v0.4.3a
-// Lower-left: Dropbox + Projecte links with pencil edit + Notes internes textarea.
+// Inspector/LinksRow.tsx - v0.4.3b
+// Lower-left: Enlla\u00e7os (Dropbox + Projecte with pencil) + Notes internes textarea.
+// Links use neutral color, never browser-default blue.
 import { useState } from 'react'
 import { type MockSubmission } from '../../mockData'
 import styles from './styles.module.css'
@@ -13,7 +14,7 @@ export function LinksRow({ submission }: Props) {
     <div className={styles.linksRow}>
 
       <div className={styles.linksSection}>
-        <span className={styles.colLabel}>Enllacos</span>
+        <span className={styles.colLabel}>Enlla\u00e7os</span>
 
         {submission.dropboxUrl && (
           <div className={styles.linkItem}>
@@ -26,7 +27,7 @@ export function LinksRow({ submission }: Props) {
             >
               Dropbox
             </a>
-            <button className={styles.editBtn} aria-label="Edit Dropbox link">
+            <button className={styles.editBtn} aria-label="Edita">
               <i className="bi bi-pencil" aria-hidden="true"></i>
             </button>
           </div>
@@ -43,7 +44,7 @@ export function LinksRow({ submission }: Props) {
             >
               Projecte
             </a>
-            <button className={styles.editBtn} aria-label="Edit project link">
+            <button className={styles.editBtn} aria-label="Edita">
               <i className="bi bi-pencil" aria-hidden="true"></i>
             </button>
           </div>

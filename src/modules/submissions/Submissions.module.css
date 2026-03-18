@@ -1,4 +1,4 @@
-/* src/modules/submissions/Submissions.module.css - v0.4.3a */
+/* src/modules/submissions/Submissions.module.css - v0.4.3b */
 
 .submissions {
   display: flex;
@@ -8,7 +8,53 @@
   overflow: hidden;
 }
 
-/* Main area: table left + inspector right */
+/* KPI strip - ADG licitaciones stats-strip style */
+.kpiStrip {
+  display: flex;
+  align-items: stretch;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border2);
+  flex-shrink: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.kpiStrip::-webkit-scrollbar { display: none; }
+
+.kpi {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 16px;
+  min-height: 30px;
+  border-right: 1px solid var(--border2);
+  flex-shrink: 0;
+}
+.kpi:last-child {
+  border-right: none;
+  margin-left: auto;
+}
+
+.kpiVal {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--text);
+}
+
+.kpiLbl {
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-top: 1px;
+}
+
+.kpiWarn { color: var(--s-warn); }
+.kpiOk   { color: var(--s-ok); }
+.kpiDes  { color: var(--s-des); }
+
+/* Main split: table left + inspector right */
 .mainArea {
   display: flex;
   flex: 1;
@@ -24,13 +70,11 @@
   transition: flex-basis 0.15s;
 }
 
-/* Shrink table to 50% when inspector is open */
 .tableContainerWithDetail {
   flex: 0 0 50%;
   border-right: 1px solid var(--border2);
 }
 
-/* Active state for toolbar toggle buttons */
 .activeToggle {
   color: var(--s-ok) !important;
   border-color: var(--s-ok) !important;

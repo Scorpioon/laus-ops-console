@@ -1,4 +1,4 @@
-/* src/modules/submissions/components/Inspector/styles.module.css - v0.4.3a */
+/* Inspector/styles.module.css - v0.4.3b */
 
 /* Outer panel -------------------------------------------------------------- */
 .panel {
@@ -60,13 +60,12 @@
 }
 
 /* Row 1: 3-column upper grid ----------------------------------------------- */
-/* Intentionally separate from lowerRow - two independent layout containers.  */
 .upperGrid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   border-bottom: 1px solid var(--border2);
   flex-shrink: 0;
-  min-height: 180px;
+  min-height: 160px;
 }
 
 /* Row 2: lower flex row ---------------------------------------------------- */
@@ -89,13 +88,14 @@
 
 /* InfoColumn --------------------------------------------------------------- */
 .infoCol {
-  padding: 10px 10px 10px 13px;
+  padding: 8px 8px 8px 13px;
   border-right: 1px solid var(--border2);
   position: relative;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
+
 /* Blue left accent bar */
 .infoCol::before {
   content: '';
@@ -107,48 +107,43 @@
   background: var(--color-info);
 }
 
-.fieldGroup {
+/* Horizontal key-value rows (matches wireframe layout) */
+.infoRow {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin-bottom: 8px;
+  align-items: flex-start;
+  gap: 5px;
+  min-height: 26px;
+  padding: 3px 0;
+  border-bottom: 1px solid var(--border3);
 }
+.infoRow:last-child { border-bottom: none; }
 
-.fieldKey {
+.infoKey {
+  width: 58px;
+  flex-shrink: 0;
   font-size: 7px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text3);
+  padding-top: 4px;
 }
 
-.fieldVal {
-  font-size: 11px;
-  color: var(--text);
-  line-height: 1.4;
-  word-break: break-word;
-}
-
-.catSection { margin-top: 2px; }
-
-.catRow {
-  display: flex;
-  align-items: center;
-  padding: 3px 6px;
-  border: 1px solid var(--border2);
-  border-radius: var(--radius);
-  background: var(--bg2);
-  margin-bottom: 3px;
-}
-
-.catVal {
+.infoVal {
+  flex: 1;
   font-size: 10px;
   color: var(--text);
-  flex: 1;
+  padding: 3px 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  min-width: 0;
+  word-break: break-word;
+  line-height: 1.35;
 }
 
 /* ContactColumn ------------------------------------------------------------ */
 .contactCol {
-  padding: 10px;
+  padding: 8px;
   border-right: 1px solid var(--border2);
   overflow-y: auto;
   display: flex;
@@ -158,8 +153,8 @@
 .contactBlock {
   display: flex;
   flex-direction: column;
-  margin-bottom: 8px;
-  padding-bottom: 8px;
+  margin-bottom: 6px;
+  padding-bottom: 6px;
   border-bottom: 1px solid var(--border3);
 }
 .contactBlock:last-of-type {
@@ -170,7 +165,7 @@
 .contactField {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   min-height: 22px;
   border-bottom: 1px solid var(--border3);
 }
@@ -178,10 +173,10 @@
 
 .cfLabel {
   font-size: 7px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text3);
-  width: 58px;
+  width: 62px;
   flex-shrink: 0;
 }
 
@@ -194,12 +189,16 @@
   white-space: nowrap;
 }
 
-/* Links in contact fields: inherit color, no browser blue */
+/* All links inside inspector: neutral color, no browser blue */
 .cfVal a {
-  color: inherit;
+  color: var(--text2);
   text-decoration: none;
+  border-bottom: 1px solid var(--border2);
 }
-.cfVal a:hover { text-decoration: underline; }
+.cfVal a:hover {
+  color: var(--text);
+  border-bottom-color: var(--text);
+}
 
 .editBtn {
   width: 16px;
@@ -217,22 +216,22 @@
 }
 .editBtn:hover { color: var(--text); }
 
-/* ALTRES INSCRIPCIONS mini grid */
-.altresSection { margin-top: 6px; }
+/* ALTRES INSCRIPCIONS compact chip grid */
+.altresSection { margin-top: 4px; }
 
 .altresLabel {
   font-size: 7px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text3);
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   display: block;
 }
 
 .altresGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 3px;
+  gap: 2px;
 }
 
 .codeBadge {
@@ -240,16 +239,17 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  font-size: 8px;
-  letter-spacing: 0.03em;
-  padding: 3px 4px;
+  font-size: 7.5px;
+  letter-spacing: 0.02em;
+  padding: 2px 3px;
   border: 1px solid var(--border2);
   border-radius: var(--radius);
   background: var(--bg2);
-  color: var(--text2);
+  color: var(--text3);
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.08s;
   font-family: monospace;
+  white-space: nowrap;
 }
 .codeBadge:hover {
   border-color: var(--border);
@@ -259,17 +259,17 @@
 
 /* StatusColumn ------------------------------------------------------------- */
 .statusCol {
-  padding: 10px;
+  padding: 8px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .statusRow {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .statusRowLabel {
@@ -284,6 +284,7 @@
   display: inline-block;
 }
 
+/* Status click badges - dark bg system matching StatusBadge */
 .statusClickBadge {
   display: inline-flex;
   align-items: center;
@@ -292,7 +293,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 3px 7px;
+  padding: 3px 8px;
   border: 1px solid;
   border-radius: var(--radius);
   cursor: pointer;
@@ -301,20 +302,38 @@
 }
 .statusClickBadge:hover { opacity: 0.82; }
 
+/* Dark-bg variants - same color system as StatusBadge */
 .statusClickBadge.ok {
-  color: var(--s-ok);
-  border-color: var(--s-ok);
-  background: var(--s-ok-bg);
+  background: #003400;
+  color: #39F669;
+  border-color: #39F669;
 }
 .statusClickBadge.warn {
-  color: var(--s-warn);
-  border-color: var(--s-warn);
-  background: var(--s-warn-bg);
+  background: #2B0502;
+  color: #FB9D04;
+  border-color: #FB9D04;
 }
 .statusClickBadge.issue {
+  background: #43091F;
+  color: #E9486E;
+  border-color: #E9486E;
+}
+
+/* Dark mode overrides for status click badges */
+[data-theme="dark"] .statusClickBadge.ok {
+  background: var(--s-ok-bg);
+  color: var(--s-ok);
+  border-color: var(--s-ok);
+}
+[data-theme="dark"] .statusClickBadge.warn {
+  background: var(--s-warn-bg);
+  color: var(--s-warn);
+  border-color: var(--s-warn);
+}
+[data-theme="dark"] .statusClickBadge.issue {
+  background: var(--s-des-bg);
   color: var(--s-des);
   border-color: var(--s-des);
-  background: var(--s-des-bg);
 }
 
 .statusDropdown {
@@ -325,7 +344,7 @@
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: 0 2px 8px rgba(0,0,0,.12);
+  box-shadow: 0 2px 10px rgba(0,0,0,.15);
   min-width: 110px;
   overflow: hidden;
 }
@@ -335,7 +354,8 @@
   width: 100%;
   padding: 6px 10px;
   text-align: left;
-  font-size: 9px;
+  font-size: 8px;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   background: none;
@@ -351,7 +371,7 @@
 .premiadoRow {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .toggleBtn {
@@ -369,45 +389,57 @@
   color: var(--text3);
   cursor: pointer;
   transition: all 0.1s;
+  min-width: 36px;
+  justify-content: center;
 }
 .toggleBtn.toggled {
-  border-color: var(--s-ok);
-  color: var(--s-ok);
+  background: #003400;
+  color: #39F669;
+  border-color: #39F669;
+}
+[data-theme="dark"] .toggleBtn.toggled {
   background: var(--s-ok-bg);
+  color: var(--s-ok);
+  border-color: var(--s-ok);
 }
 
 .premioSelect {
   width: 100%;
-  padding: 4px 6px;
+  padding: 4px 22px 4px 6px;
   font-size: 9px;
+  letter-spacing: 0.03em;
   border: 1px solid var(--border2);
   border-radius: var(--radius);
-  background: var(--bg);
+  background: var(--bg2);
   color: var(--text2);
   cursor: pointer;
   appearance: none;
   outline: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4'%3E%3Cpath d='M0 0l4 4 4-4z' fill='%23999'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
 }
 .premioSelect:focus {
   border-color: var(--border);
   color: var(--text);
+  background-color: var(--bg);
 }
 
 /* LinksRow (lower-left) ---------------------------------------------------- */
 .linksRow {
   flex: 1;
-  padding: 10px;
+  padding: 8px;
   border-right: 1px solid var(--border2);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   overflow-y: auto;
 }
 
 .linksSection {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .linkItem {
@@ -426,17 +458,21 @@
   flex-shrink: 0;
 }
 
-/* Link anchors: inherit color, no browser blue */
+/* Link anchors: neutral color, never browser-default blue */
 .linkAnchor {
   flex: 1;
   font-size: 9.5px;
-  color: var(--text);
+  color: var(--text2);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   text-decoration: none;
+  border-bottom: 1px solid var(--border2);
 }
-.linkAnchor:hover { text-decoration: underline; }
+.linkAnchor:hover {
+  color: var(--text);
+  border-bottom-color: var(--text);
+}
 
 .notesSection {
   display: flex;
@@ -454,7 +490,7 @@
 
 .notesTextarea {
   flex: 1;
-  min-height: 60px;
+  min-height: 56px;
   padding: 6px 8px;
   font-size: 10px;
   line-height: 1.5;
@@ -475,12 +511,13 @@
 
 /* ActionStack (lower-right) ------------------------------------------------ */
 .actionStack {
-  flex: 0 0 128px;
-  padding: 10px 8px;
+  flex: 0 0 120px;
+  padding: 8px 7px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   background: var(--bg2);
+  border-left: 1px solid var(--border2);
 }
 
 .actionBtn {
@@ -491,8 +528,8 @@
   width: 100%;
   height: 26px;
   font-size: 8px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   border: 1px solid;
   border-radius: var(--radius);
@@ -504,15 +541,15 @@
 .actionBtn:disabled { opacity: 0.35; cursor: default; }
 
 .actionDesa {
-  background: var(--s-ok);
-  color: #ffffff;
-  border-color: var(--s-ok);
+  background: #003400;
+  color: #39F669;
+  border-color: #39F669;
 }
 
 .actionDescartar {
-  background: var(--s-warn);
-  color: #ffffff;
-  border-color: var(--s-warn);
+  background: #2B0502;
+  color: #FB9D04;
+  border-color: #FB9D04;
 }
 
 .actionNeutral {
@@ -529,7 +566,24 @@
 .actionSpacer { flex: 1; }
 
 .actionEliminar {
-  background: var(--s-des);
-  color: #ffffff;
+  background: #43091F;
+  color: #E9486E;
+  border-color: #E9486E;
+}
+
+/* Dark mode: action buttons use token values */
+[data-theme="dark"] .actionDesa {
+  background: var(--s-ok-bg);
+  color: var(--s-ok);
+  border-color: var(--s-ok);
+}
+[data-theme="dark"] .actionDescartar {
+  background: var(--s-warn-bg);
+  color: var(--s-warn);
+  border-color: var(--s-warn);
+}
+[data-theme="dark"] .actionEliminar {
+  background: var(--s-des-bg);
+  color: var(--s-des);
   border-color: var(--s-des);
 }
