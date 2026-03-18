@@ -1,43 +1,41 @@
-/* src/shared/ui/Button/styles.module.css */
+/* src/shared/ui/Button/styles.module.css - v0.4.3a */
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.75rem;
-  font-weight: 500;
+  gap: 4px;
+  padding: 0 10px;
+  height: 26px;
+  font-size: 8.5px;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
   border: 1px solid transparent;
   border-radius: var(--radius);
   cursor: pointer;
   transition: all 0.1s;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .button:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
+/* Legacy variants ---------------------------------------------------------- */
 .primary {
   background: var(--text);
   color: var(--bg);
   border-color: var(--text);
 }
-
-.primary:hover:not(:disabled) {
-  background: var(--text2);
-  border-color: var(--text2);
-}
+.primary:hover:not(:disabled) { opacity: .82; }
 
 .secondary {
   background: transparent;
   color: var(--text2);
   border-color: var(--border2);
 }
-
 .secondary:hover:not(:disabled) {
   background: var(--bg2);
   color: var(--text);
@@ -45,14 +43,66 @@
 }
 
 .icon {
-  padding: 0.25rem;
+  padding: 0;
+  width: 26px;
+  height: 26px;
   background: transparent;
-  border: none;
+  border: 1px solid var(--border2);
   color: var(--text2);
-  font-size: 1rem;
-  line-height: 1;
+  font-size: 13px;
 }
-
 .icon:hover:not(:disabled) {
   color: var(--text);
+  border-color: var(--border);
+  background: var(--bg2);
 }
+
+/* Semantic variants -------------------------------------------------------- */
+
+/* DESA - green */
+.save {
+  background: var(--s-ok);
+  color: #ffffff;
+  border-color: var(--s-ok);
+  font-weight: 700;
+}
+.save:hover:not(:disabled) { opacity: .85; }
+
+/* DESCARTAR - amber */
+.discard {
+  background: var(--s-warn);
+  color: #ffffff;
+  border-color: var(--s-warn);
+  font-weight: 700;
+}
+.discard:hover:not(:disabled) { opacity: .85; }
+
+/* ELIMINAR - red */
+.delete {
+  background: var(--s-des);
+  color: #ffffff;
+  border-color: var(--s-des);
+  font-weight: 700;
+}
+.delete:hover:not(:disabled) { opacity: .85; }
+
+/* CONTACTE / DUPLICAR - neutral border */
+.neutral {
+  background: transparent;
+  color: var(--text2);
+  border-color: var(--border2);
+}
+.neutral:hover:not(:disabled) {
+  background: var(--bg2);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+/* Ghost - no border */
+.ghost {
+  background: transparent;
+  color: var(--text3);
+  border-color: transparent;
+  padding: 0 4px;
+}
+.ghost:hover:not(:disabled) { color: var(--text); }

@@ -1,71 +1,96 @@
-/* src/app.css */
+/* src/app.css - v0.4.3a */
+
+/* --- TOKENS ---------------------------------------------------------------- */
 :root {
-  /* Light theme - ADG inspired */
-  --bg: #ffffff;
-  --bg2: #f5f5f5;
-  --bg3: #ebebeb;
-  --border: #000000;
-  --border2: #d4d4d4;
-  --border3: #ebebeb;
-  --text: #000000;
-  --text2: #555555;
-  --text3: #999999;
-  --hover: #f5f5f5;
-  --sel-bg: #000000;
-  --sel-fg: #ffffff;
-  --chip-bg: #000000;
-  --chip-fg: #ffffff;
-  --s-ok: #16A34A;
-  --s-ok-bg: #DCFCE7;
-  --s-warn: #D97706;
+  --bg:       #ffffff;
+  --bg2:      #f5f5f5;
+  --bg3:      #ebebeb;
+  --border:   #000000;
+  --border2:  #d4d4d4;
+  --border3:  #ebebeb;
+  --text:     #000000;
+  --text2:    #555555;
+  --text3:    #999999;
+  --hover:    #f5f5f5;
+  --sel-bg:   #000000;
+  --sel-fg:   #ffffff;
+  --chip-bg:  #000000;
+  --chip-fg:  #ffffff;
+  /* Semaphore */
+  --s-ok:      #16A34A;
+  --s-ok-bg:   #DCFCE7;
+  --s-warn:    #D97706;
   --s-warn-bg: #FFFBEB;
-  --s-adj: #6B7280;
-  --s-adj-bg: #F3F4F6;
-  --s-des: #DC2626;
-  --s-des-bg: #FEF2F2;
-  --radius: 0px; /* ADG uses 0 border radius */
-  --font-family: 'NeueHaasUnica', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --s-adj:     #6B7280;
+  --s-adj-bg:  #F3F4F6;
+  --s-des:     #DC2626;
+  --s-des-bg:  #FEF2F2;
+  /* Premio levels from ADG site CSS */
+  --color-bronze: #a05400;
+  --color-silver: #a3aaad;
+  --color-gold:   #ae9a64;
+  /* Info accent */
+  --color-info: #2563EB;
+  /* System */
+  --radius:      2px;
+  --font-family: 'NeueHaasUnica', 'NeueHaasUnicaPro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 [data-theme="dark"] {
-  --bg: #0b0b0b;
-  --bg2: #161616;
-  --bg3: #222222;
-  --border: #e0e0e0;
-  --border2: #2a2a2a;
-  --border3: #1e1e1e;
-  --text: #efefef;
-  --text2: #aaaaaa;
-  --text3: #555555;
-  --hover: #1a1a1a;
-  --sel-bg: #efefef;
-  --sel-fg: #000000;
-  --chip-bg: #efefef;
-  --chip-fg: #000000;
-  --s-ok: #4ADE80;
-  --s-ok-bg: #052E16;
-  --s-warn: #FCD34D;
+  --bg:       #0b0b0b;
+  --bg2:      #161616;
+  --bg3:      #222222;
+  --border:   #e0e0e0;
+  --border2:  #2a2a2a;
+  --border3:  #1e1e1e;
+  --text:     #efefef;
+  --text2:    #aaaaaa;
+  --text3:    #555555;
+  --hover:    #1a1a1a;
+  --sel-bg:   #efefef;
+  --sel-fg:   #000000;
+  --chip-bg:  #efefef;
+  --chip-fg:  #000000;
+  --s-ok:      #4ADE80;
+  --s-ok-bg:   #052E16;
+  --s-warn:    #FCD34D;
   --s-warn-bg: #1C1400;
-  --s-adj: #9CA3AF;
-  --s-adj-bg: #111827;
-  --s-des: #F87171;
-  --s-des-bg: #1A0000;
+  --s-adj:     #9CA3AF;
+  --s-adj-bg:  #111827;
+  --s-des:     #F87171;
+  --s-des-bg:  #1A0000;
 }
 
-* {
+/* --- RESET ----------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  scrollbar-width: none;
 }
+*::-webkit-scrollbar { display: none; }
+
+html, body { height: 100%; }
 
 body {
   font-family: var(--font-family);
+  font-size: 13px;
   background: var(--bg);
   color: var(--text);
-  line-height: 1.5;
+  line-height: 1;
   -webkit-font-smoothing: antialiased;
 }
 
+a { color: inherit; text-decoration: none; }
+
+button, select, input {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* --- LAYOUT ---------------------------------------------------------------- */
 .app {
   display: flex;
   flex-direction: column;
@@ -75,12 +100,41 @@ body {
 
 .main-content {
   flex: 1;
-  overflow-y: hidden; /* changed from auto to hidden to prevent global scroll */
-  padding: 1.5rem;
+  min-height: 0;
+  overflow: hidden;
   background: var(--bg2);
+  padding: 0;
 }
 
-/* Utility classes */
+/* --- TOOLBAR (shared) ------------------------------------------------------ */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border2);
+  flex-shrink: 0;
+  min-height: 34px;
+  flex-wrap: wrap;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-right: 4px;
+  padding-right: 4px;
+  border-right: 1px solid var(--border3);
+}
+
+.toolbar-group:last-child {
+  border-right: none;
+  margin-right: 0;
+  padding-right: 0;
+}
+
+/* --- UTILITY --------------------------------------------------------------- */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -91,44 +145,4 @@ body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
-}
-
-/* Remove default button styles */
-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-/* Scrollbar hiding (optional) */
-* {
-  scrollbar-width: none;
-}
-*::-webkit-scrollbar {
-  display: none;
-}
-
-/* Toolbar styling */
-.toolbar {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border2);
-  flex-wrap: wrap;
-}
-
-.toolbar-group {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  margin-right: 0.5rem;
-  padding-right: 0.5rem;
-  border-right: 1px solid var(--border3);
-}
-
-.toolbar-group:last-child {
-  border-right: none;
 }

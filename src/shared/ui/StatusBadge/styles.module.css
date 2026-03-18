@@ -1,40 +1,42 @@
-﻿/* src/shared/ui/StatusBadge/styles.module.css - v0.4.2 */
+/* src/shared/ui/StatusBadge/styles.module.css - v0.4.3a */
+/* Uses CSS tokens - correct in both light and dark mode. */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.1rem 0.4rem;
-  font-size: 0.55rem;
+  gap: 3px;
+  padding: 2px 5px;
+  font-size: 8px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.06em;
   border-radius: var(--radius);
   border: 1px solid;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 .ok {
-  background: #052E16;
-  color: #4ADE80;
-  border-color: #4ADE80;
+  background: var(--s-ok-bg);
+  color: var(--s-ok);
+  border-color: var(--s-ok);
 }
 
 .warning {
-  background: #1C1400;
-  color: #FCD34D;
-  border-color: #FCD34D;
+  background: var(--s-warn-bg);
+  color: var(--s-warn);
+  border-color: var(--s-warn);
 }
 
 .issue {
-  background: #1A0000;
-  color: #F87171;
-  border-color: #F87171;
+  background: var(--s-des-bg);
+  color: var(--s-des);
+  border-color: var(--s-des);
 }
 
 .info {
-  background: #082032;
-  color: #7DD3FC;
-  border-color: #7DD3FC;
+  background: var(--s-adj-bg);
+  color: var(--s-adj);
+  border-color: var(--s-adj);
 }
 
 .neutral {
