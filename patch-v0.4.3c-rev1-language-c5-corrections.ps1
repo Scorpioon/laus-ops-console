@@ -1,3 +1,151 @@
+#Requires -Version 5.1
+# =============================================================================
+# LAUS OPS CONSOLE - patch v0.4.3c-rev1 - Language + C5 Corrections
+#
+# Apply AFTER v0.4.3c.
+# Run from project root:
+#   cd K:\DEVKIT\projects\laus-ops-console\laus-ops-console
+#   .\patch-v0.4.3c-rev1-language-c5-corrections.ps1
+#
+# Files changed (3):
+#   src\shared\layout\TopBar\index.tsx           English tabs (language consistency)
+#   src\modules\submissions\components\Inspector\styles.module.css
+#                                                C5 fixed narrow rail (not flex:1)
+#   src\modules\submissions\Submissions.module.css
+#                                                KPI strip minor tightening
+# =============================================================================
+
+Set-StrictMode -Off
+$ErrorActionPreference = 'Stop'
+
+$root = (Get-Location).Path
+
+if (!(Test-Path (Join-Path $root 'package.json'))) {
+    Write-Host ""
+    Write-Host "ERROR: package.json not found in: $root" -ForegroundColor Red
+    Write-Host "Navigate to the project root first." -ForegroundColor Yellow
+    Write-Host ""
+    exit 1
+}
+
+function Write-File {
+    param([string]$Rel, [string]$Content)
+    $full = Join-Path $root $Rel
+    $dir  = Split-Path $full -Parent
+    if (!(Test-Path $dir)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
+    [System.IO.File]::WriteAllText($full, $Content, (New-Object System.Text.UTF8Encoding $false))
+    Write-Host "  OK  $Rel" -ForegroundColor Green
+}
+
+Write-Host ""
+Write-Host "LAUS OPS CONSOLE - patch v0.4.3c-rev1" -ForegroundColor Cyan
+Write-Host "Language + C5 Corrections" -ForegroundColor Cyan
+Write-Host "Root: $root" -ForegroundColor DarkGray
+Write-Host ""
+
+
+# =============================================================================
+# 01  src\shared\layout\TopBar\index.tsx
+#     Tab labels in English - consistent with inspector and KPI language.
+# =============================================================================
+Write-File 'src\shared\layout\TopBar\index.tsx' @'
+// TopBar/index.tsx - v0.4.3c-rev1
+// English tabs - consistent with inspector and KPI language.
+import { useState, useEffect } from 'react'
+import { useUIStore } from '../../../core/store/uiStore'
+import styles from './styles.module.css'
+
+const TABS = [
+  { id: 'submissions', label: 'SUBMISSIONS' },
+  { id: 'jury',        label: 'JURY'        },
+  { id: 'templates',   label: 'TEMPLATES'   },
+  { id: 'insights',    label: 'INSIGHTS'    },
+  { id: 'helpdesk',    label: 'HELP'        },
+  { id: 'laurel',      label: 'AWARDED'     },
+  { id: 'settings',    label: 'CONFIG'      },
+]
+
+function LiveClock() {
+  const [ts, setTs] = useState(() => new Date())
+  useEffect(() => {
+    const id = setInterval(() => setTs(new Date()), 1000)
+    return () => clearInterval(id)
+  }, [])
+  const p = (n: number) => String(n).padStart(2, '0')
+  return (
+    <span className={styles.clock}>
+      {p(ts.getDate())}/{p(ts.getMonth() + 1)}/{ts.getFullYear()}
+      &nbsp;|&nbsp;
+      {p(ts.getHours())}:{p(ts.getMinutes())}:{p(ts.getSeconds())}
+    </span>
+  )
+}
+
+export function TopBar() {
+  const { activeModule, setActiveModule, language, setLanguage, theme, toggleTheme } = useUIStore()
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
+
+  return (
+    <header className={styles.topbar}>
+
+      {/* Left: logo + tabs */}
+      <div className={styles.left}>
+        <div className={styles.logo}>
+          <span className={styles.logoPrimary}>LAUS OPS</span>
+          <span className={styles.logoSecondary}>console</span>
+        </div>
+        <nav className={styles.tabs} aria-label="Modules">
+          {TABS.map(tab => (
+            <button
+              key={tab.id}
+              className={`${styles.tab} ${activeModule === tab.id ? styles.tabActive : ''}`}
+              onClick={() => setActiveModule(tab.id)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </nav>
+      </div>
+
+      {/* Right: operator + clock + lang + theme */}
+      <div className={styles.right}>
+        <i className="bi bi-person-circle" aria-hidden="true"></i>
+        <span className={styles.operator}>OPERATOR ADG</span>
+        <LiveClock />
+        <div className={styles.langWrap}>
+          <button
+            className={`${styles.langBtn} ${language === 'ca' ? styles.langActive : ''}`}
+            onClick={() => setLanguage('ca')}
+          >CA</button>
+          <button
+            className={`${styles.langBtn} ${language === 'es' ? styles.langActive : ''}`}
+            onClick={() => setLanguage('es')}
+          >ES</button>
+        </div>
+        <button className={styles.themeBtn} onClick={toggleTheme} aria-label="Toggle theme">
+          {theme === 'light'
+            ? <i className="bi bi-sun" aria-hidden="true"></i>
+            : <i className="bi bi-moon-stars" aria-hidden="true"></i>
+          }
+        </button>
+      </div>
+
+    </header>
+  )
+}
+'@
+
+
+# =============================================================================
+# 02  Inspector\styles.module.css
+#     C5 (actionStack): fixed narrow rail - 108px, not flex:1.
+#     C4 (linksRow): flex:1 - takes all remaining space, clearly dominates.
+#     Proportions: C4 clearly wider, C5 is a narrow action rail.
+# =============================================================================
+Write-File 'src\modules\submissions\components\Inspector\styles.module.css' @'
 /* Inspector/styles.module.css - v0.4.3c-rev1 */
 
 /* Outer panel -------------------------------------------------------------- */
@@ -82,7 +230,7 @@
   display: block;
 }
 
-/* C1 â€” InfoColumn ---------------------------------------------------------- */
+/* C1 — InfoColumn ---------------------------------------------------------- */
 .infoCol {
   padding: 12px;
   border-right: 1px solid var(--border2);
@@ -160,7 +308,7 @@
   white-space: nowrap;
 }
 
-/* C2 â€” ContactColumn ------------------------------------------------------- */
+/* C2 — ContactColumn ------------------------------------------------------- */
 .contactCol {
   padding: 12px;
   border-right: 1px solid var(--border2);
@@ -205,7 +353,7 @@
   white-space: nowrap;
 }
 
-/* Neutral links â€” never browser blue */
+/* Neutral links — never browser blue */
 .cfVal a {
   color: var(--text2);
   text-decoration: none;
@@ -245,7 +393,7 @@
 }
 .codeBadge:hover { border-color: var(--border); background: var(--bg3); color: var(--text); }
 
-/* C3 â€” StatusColumn -------------------------------------------------------- */
+/* C3 — StatusColumn -------------------------------------------------------- */
 .statusCol {
   padding: 12px;
   overflow-y: auto;
@@ -328,8 +476,8 @@
 }
 .premioSelect:focus { border-color: var(--border); color: var(--text); }
 
-/* C4 â€” LinksRow (Row 2 wide block) ---------------------------------------- */
-/* flex:1 â€” takes all space not claimed by C5 */
+/* C4 — LinksRow (Row 2 wide block) ---------------------------------------- */
+/* flex:1 — takes all space not claimed by C5 */
 .linksRow {
   flex: 1;
   padding: 12px;
@@ -376,7 +524,7 @@
 }
 .notesTextarea:focus { border-color: var(--border); color: var(--text); background: var(--bg); }
 
-/* C5 â€” ActionStack (Row 2 narrow action rail) ------------------------------ */
+/* C5 — ActionStack (Row 2 narrow action rail) ------------------------------ */
 /* Fixed width: narrow rail, C4 clearly dominates */
 .actionStack {
   flex: 0 0 108px;
@@ -416,3 +564,104 @@
 [data-theme="dark"] .actionDesa      { background: var(--s-ok-bg);   color: var(--s-ok);   border-color: var(--s-ok); }
 [data-theme="dark"] .actionDescartar { background: var(--s-warn-bg); color: var(--s-warn); border-color: var(--s-warn); }
 [data-theme="dark"] .actionEliminar  { background: var(--s-des-bg);  color: var(--s-des);  border-color: var(--s-des); }
+'@
+
+
+# =============================================================================
+# 03  src\modules\submissions\Submissions.module.css
+#     KPI strip: slightly more padding for readability without bulk.
+# =============================================================================
+Write-File 'src\modules\submissions\Submissions.module.css' @'
+/* Submissions.module.css - v0.4.3c-rev1 */
+
+.submissions {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+/* KPI strip ---------------------------------------------------------------- */
+.kpiStrip {
+  display: flex;
+  align-items: stretch;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border2);
+  flex-shrink: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  min-height: 38px;
+}
+.kpiStrip::-webkit-scrollbar { display: none; }
+
+.kpi {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 18px;
+  border-right: 1px solid var(--border2);
+  flex-shrink: 0;
+}
+.kpi:last-child { border-right: none; margin-left: auto; }
+
+.kpiVal {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--text);
+}
+
+.kpiLbl {
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+.kpiWarn { color: var(--s-warn); }
+.kpiOk   { color: var(--s-ok); }
+.kpiDes  { color: var(--s-des); }
+
+/* Main layout -------------------------------------------------------------- */
+.mainArea {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tableContainer {
+  flex: 1 1 100%;
+  overflow: auto;
+  background: var(--bg);
+  position: relative;
+}
+
+.tableContainerWithDetail {
+  flex: 0 0 50%;
+  border-right: 1px solid var(--border2);
+}
+
+.activeToggle {
+  color: var(--s-ok) !important;
+  border-color: var(--s-ok) !important;
+}
+'@
+
+
+# =============================================================================
+Write-Host ""
+Write-Host "patch v0.4.3c-rev1 complete - 3 files written." -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Next: npm run dev" -ForegroundColor Yellow
+Write-Host ""
+Write-Host "What changed:" -ForegroundColor DarkGray
+Write-Host "  TopBar           Tab labels now English (SUBMISSIONS, JURY, TEMPLATES, etc.)" -ForegroundColor DarkGray
+Write-Host "  Inspector styles C5 fixed: flex:0 0 108px (narrow action rail)" -ForegroundColor DarkGray
+Write-Host "                   C4 flex:1 (dominates, clearly wide operational block)" -ForegroundColor DarkGray
+Write-Host "  Submissions.css  KPI strip: min-height 38px, padding 18px, labels nowrap" -ForegroundColor DarkGray
+Write-Host ""

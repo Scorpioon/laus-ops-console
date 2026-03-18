@@ -1,138 +1,157 @@
-// Inspector/StatusColumn.tsx - v0.4.3b
-// Col 3: PAGAMENT/MATERIAL click-to-dropdown (dark-bg badges),
-//        PREMIAT toggle, PREMIO selector.
-// Workflow-only state. No write-back to RawSubmission (v0.4.3c).
+// StatusColumn.tsx - v0.4.3c
+// Col 3: canonical status fields + workflow fields.
 import { useState } from 'react'
 import { type MockSubmission } from '../../mockData'
 import styles from './styles.module.css'
 
 interface Props { submission: MockSubmission }
 
-type PaymentVal  = 'ok' | 'pending' | 'issue'
-type MaterialVal = 'ok' | 'warning' | 'issue'
+type PayVal = 'ok' | 'pending' | 'issue'
+type MatVal = 'ok' | 'warning' | 'issue'
 
-const PAYMENT_OPTS: { value: PaymentVal;  label: string }[] = [
-  { value: 'ok',      label: 'Rebut'   },
-  { value: 'pending', label: 'Pendent' },
-  { value: 'issue',   label: 'Error'   },
+const PAY_OPTS:  { v: PayVal; label: string }[] = [
+  { v:'ok',      label:'Confirmed' },
+  { v:'pending', label:'Pending'   },
+  { v:'issue',   label:'Error'     },
 ]
-const MATERIAL_OPTS: { value: MaterialVal; label: string }[] = [
-  { value: 'ok',      label: 'Rebut'   },
-  { value: 'warning', label: 'Pendent' },
-  { value: 'issue',   label: 'Falta'   },
+const MAT_OPTS: { v: MatVal; label: string }[] = [
+  { v:'ok',      label:'Received' },
+  { v:'warning', label:'Pending'  },
+  { v:'issue',   label:'Missing'  },
 ]
-const PREMIO_OPTS = [
-  '',
-  'inBook',
-  'Bronce',
-  'Plata',
-  'Oro',
-  'Grand Laus',
-  'Grand Laus Estudiants',
-  'Laus de Honor',
-  'Laus Aporta',
-]
+const AWARD_OPTS = ['','inBook','Bronce','Plata','Oro','Grand Laus','Grand Laus Students','Laus de Honor','Laus Aporta']
 
-const badgeClass = (val: PaymentVal | MaterialVal): string => {
-  if (val === 'ok')      return styles.ok
-  if (val === 'pending') return styles.warn
-  if (val === 'warning') return styles.warn
-  return styles.issue
+const bClass = (v: PayVal | MatVal) =>
+  v === 'ok' ? styles.ok : v === 'pending' || v === 'warning' ? styles.warn : styles.issue
+
+const payLabel = (v: PayVal):  string => v === 'ok' ? 'Confirmed' : v === 'pending' ? 'Pending' : 'Error'
+const matLabel = (v: MatVal):  string => v === 'ok' ? 'Received'  : v === 'warning' ? 'Pending' : 'Missing'
+
+function DropdownBadge<T extends string>({
+  value, label, classKey, open, onToggle, opts, onSelect,
+}: {
+  value: T; label: string; classKey: string; open: boolean;
+  onToggle: () => void; opts: { v: T; label: string }[]; onSelect: (v: T) => void;
+}) {
+  return (
+    <div className={styles.statusRow}>
+      <span className={styles.statusRowLabel}>{label}</span>
+      <div className={styles.statusBadgeWrap}>
+        <button
+          className={`${styles.statusClickBadge} ${classKey}`}
+          onClick={onToggle}
+        >
+          {opts.find(o => o.v === value)?.label ?? value}
+          <i className="bi bi-chevron-down" style={{ fontSize:'6px' }} aria-hidden="true"></i>
+        </button>
+        {open && (
+          <div className={styles.statusDropdown}>
+            {opts.map(o => (
+              <button key={o.v} className={styles.statusDropdownItem} onClick={() => onSelect(o.v)}>
+                {o.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }
 
-const payLabel  = (v: PaymentVal):  string => v === 'ok' ? 'Rebut'  : v === 'pending' ? 'Pendent' : 'Error'
-const matLabel  = (v: MaterialVal): string => v === 'ok' ? 'Rebut'  : v === 'warning' ? 'Pendent' : 'Falta'
-
 export function StatusColumn({ submission }: Props) {
-  const [payment,  setPayment]  = useState<PaymentVal>(submission.payment)
-  const [material, setMaterial] = useState<MaterialVal>(submission.material)
+  const [payment,  setPayment]  = useState<PayVal>(submission.payment)
+  const [physMat,  setPhysMat]  = useState<MatVal>(submission.material)
+  const [digMat,   setDigMat]   = useState<MatVal>(submission.digitalMat ?? 'ok')
   const [payOpen,  setPayOpen]  = useState(false)
-  const [matOpen,  setMatOpen]  = useState(false)
-  const [premiado, setPremiado] = useState(false)
-  const [premio,   setPremio]   = useState('')
+  const [phyOpen,  setPhyOpen]  = useState(false)
+  const [digOpen,  setDigOpen]  = useState(false)
+  const [returnMat,    setReturnMat]    = useState(submission.returnMaterial ?? false)
+  const [projSel,      setProjSel]      = useState(submission.projectSelected ?? false)
+  const [awarded,      setAwarded]      = useState(!!submission.award)
+  const [awardLevel,   setAwardLevel]   = useState(submission.award ?? '')
+
+  const closeAll = () => { setPayOpen(false); setPhyOpen(false); setDigOpen(false) }
 
   return (
     <div className={styles.statusCol}>
-      <span className={styles.colLabel}>Estat</span>
+      <span className={styles.colLabel}>Status</span>
 
-      {/* PAGAMENT */}
-      <div className={styles.statusRow}>
-        <span className={styles.statusRowLabel}>Pagament</span>
-        <div className={styles.statusBadgeWrap}>
-          <button
-            className={`${styles.statusClickBadge} ${badgeClass(payment)}`}
-            onClick={() => { setPayOpen(!payOpen); setMatOpen(false) }}
-          >
-            {payLabel(payment)}
-            <i className="bi bi-chevron-down" style={{ fontSize: '6px' }} aria-hidden="true"></i>
-          </button>
-          {payOpen && (
-            <div className={styles.statusDropdown}>
-              {PAYMENT_OPTS.map((o) => (
-                <button
-                  key={o.value}
-                  className={styles.statusDropdownItem}
-                  onClick={() => { setPayment(o.value); setPayOpen(false) }}
-                >
-                  {o.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
+      {/* PAYMENT */}
+      <DropdownBadge
+        value={payment} label="Payment" classKey={bClass(payment)}
+        open={payOpen} onToggle={() => { closeAll(); setPayOpen(!payOpen) }}
+        opts={PAY_OPTS} onSelect={v => { setPayment(v); setPayOpen(false) }}
+      />
 
-      {/* MATERIAL */}
-      <div className={styles.statusRow}>
-        <span className={styles.statusRowLabel}>Material</span>
-        <div className={styles.statusBadgeWrap}>
-          <button
-            className={`${styles.statusClickBadge} ${badgeClass(material)}`}
-            onClick={() => { setMatOpen(!matOpen); setPayOpen(false) }}
-          >
-            {matLabel(material)}
-            <i className="bi bi-chevron-down" style={{ fontSize: '6px' }} aria-hidden="true"></i>
-          </button>
-          {matOpen && (
-            <div className={styles.statusDropdown}>
-              {MATERIAL_OPTS.map((o) => (
-                <button
-                  key={o.value}
-                  className={styles.statusDropdownItem}
-                  onClick={() => { setMaterial(o.value); setMatOpen(false) }}
-                >
-                  {o.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
+      {/* PHYSICAL MAT */}
+      <DropdownBadge
+        value={physMat} label="Physical mat." classKey={bClass(physMat)}
+        open={phyOpen} onToggle={() => { closeAll(); setPhyOpen(!phyOpen) }}
+        opts={MAT_OPTS} onSelect={v => { setPhysMat(v); setPhyOpen(false) }}
+      />
+      {submission.physicalMatDesc && (
+        <span className={styles.statusSmallNote}>{submission.physicalMatDesc}</span>
+      )}
 
-      {/* PREMIAT - workflow flag */}
+      {/* DIGITAL MAT */}
+      <DropdownBadge
+        value={digMat} label="Digital mat." classKey={bClass(digMat)}
+        open={digOpen} onToggle={() => { closeAll(); setDigOpen(!digOpen) }}
+        opts={MAT_OPTS} onSelect={v => { setDigMat(v); setDigOpen(false) }}
+      />
+
+      {/* RETURN MATERIAL */}
       <div className={styles.statusRow}>
-        <span className={styles.statusRowLabel}>Premiat</span>
-        <div className={styles.premiadoRow}>
+        <span className={styles.statusRowLabel}>Return mat.</span>
+        <div className={styles.toggleRow}>
           <button
-            className={`${styles.toggleBtn} ${premiado ? styles.toggled : ''}`}
-            onClick={() => setPremiado(!premiado)}
+            className={`${styles.toggleBtn} ${returnMat ? styles.toggled : ''}`}
+            onClick={() => setReturnMat(!returnMat)}
           >
-            {premiado ? 'S\u00ed' : 'No'}
+            {returnMat ? 'Yes' : 'No'}
           </button>
         </div>
       </div>
 
-      {/* PREMIO - visible only when premiado */}
-      {premiado && (
+      {/* PROJECT SELECTED */}
+      <div className={styles.statusRow}>
+        <span className={styles.statusRowLabel}>Project sel.</span>
+        <div className={styles.toggleRow}>
+          <button
+            className={`${styles.toggleBtn} ${projSel ? styles.toggled : ''}`}
+            onClick={() => setProjSel(!projSel)}
+          >
+            {projSel ? 'Yes' : 'No'}
+          </button>
+        </div>
+      </div>
+
+      <hr className={styles.statusDivider} />
+
+      {/* AWARDED - workflow only */}
+      <div className={styles.statusRow}>
+        <span className={styles.statusRowLabel}>Awarded</span>
+        <div className={styles.toggleRow}>
+          <button
+            className={`${styles.toggleBtn} ${awarded ? styles.toggled : ''}`}
+            onClick={() => setAwarded(!awarded)}
+          >
+            {awarded ? 'Yes' : 'No'}
+          </button>
+        </div>
+      </div>
+
+      {/* AWARD LEVEL - visible when awarded */}
+      {awarded && (
         <div className={styles.statusRow}>
-          <span className={styles.statusRowLabel}>Premio</span>
+          <span className={styles.statusRowLabel}>Award level</span>
           <select
             className={styles.premioSelect}
-            value={premio}
-            onChange={(e) => setPremio(e.target.value)}
+            value={awardLevel}
+            onChange={e => setAwardLevel(e.target.value)}
           >
-            {PREMIO_OPTS.map((o) => (
-              <option key={o} value={o}>{o || '-- selecciona --'}</option>
+            {AWARD_OPTS.map(o => (
+              <option key={o} value={o}>{o || '-- select --'}</option>
             ))}
           </select>
         </div>

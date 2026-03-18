@@ -1,17 +1,21 @@
-/* src/modules/submissions/components/Table/styles.module.css - v0.4.3b */
+/* Table/styles.module.css - v0.4.3c - spreadsheet simulation */
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.8rem;
+  font-size: 11.5px;
+  table-layout: auto;
 }
 
-.table th {
+.th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   text-align: left;
-  padding: 0.5rem 0.75rem;
+  padding: 6px 9px;
   background: var(--bg2);
   color: var(--text3);
   font-weight: 400;
-  font-size: 0.65rem;
+  font-size: 7.5px;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   border-bottom: 1px solid var(--border2);
@@ -19,38 +23,50 @@
   user-select: none;
 }
 
+.sortable { cursor: pointer; }
+.sortable:hover { color: var(--text2); }
+.sorted { color: var(--text); }
+
+.sortNull { margin-left: 3px; opacity: 0.3; font-style: normal; }
+.sortArrow { margin-left: 3px; font-style: normal; }
+
 .table td {
-  padding: 0.45rem 0.75rem;
+  padding: 7px 9px;
   border-bottom: 1px solid var(--border3);
   color: var(--text);
-  white-space: nowrap;
   vertical-align: middle;
+  white-space: nowrap;
 }
 
-.table tbody tr:hover {
-  background: var(--hover);
-  cursor: pointer;
-}
-
-/* Selected row: system left-accent + subtle bg */
-.table tbody tr.selected {
+.row { cursor: pointer; transition: background 0.06s; }
+.row:hover { background: var(--hover); }
+.row.selected {
   background: var(--bg3);
   box-shadow: inset 3px 0 0 var(--text);
 }
+.row.selected td { color: var(--text); }
 
-.table tbody tr.selected td {
-  color: var(--text);
-}
+/* Column widths */
+.cbCell    { width: 30px; text-align: center; padding: 0 8px; }
+.ordreCell { width: 36px; text-align: right; color: var(--text3); font-size: 10px; }
+.codeCell  { width: 72px; font-family: monospace; font-size: 11px; font-weight: 600; color: var(--text2); }
+.titleCell { min-width: 180px; max-width: 320px; overflow: hidden; text-overflow: ellipsis; }
+.catCell   { width: 90px; font-size: 11px; }
+.platCell  { width: 80px; font-size: 11px; color: var(--text2); }
+.yearCell  { width: 50px; text-align: right; color: var(--text3); font-size: 10px; }
 
-.checkboxCell {
-  width: 2rem;
-  text-align: center;
-  padding-left: 0.75rem;
+.awardCell { width: 80px; }
+.awardChip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 5px;
+  border-radius: var(--radius);
+  background: #01005D;
+  color: #9694F4;
+  border: 1px solid #9694F4;
 }
-
-.codeCell {
-  font-family: monospace;
-  font-weight: 600;
-  font-size: 0.75rem;
-  color: var(--text2);
-}
+.awardNone { color: var(--text3); font-size: 10px; }

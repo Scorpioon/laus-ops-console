@@ -1,6 +1,4 @@
-// Inspector/LinksRow.tsx - v0.4.3b
-// Lower-left: Enlla\u00e7os (Dropbox + Projecte with pencil) + Notes internes textarea.
-// Links use neutral color, never browser-default blue.
+// LinksRow.tsx - v0.4.3c - English labels. Neutral link colors.
 import { useState } from 'react'
 import { type MockSubmission } from '../../mockData'
 import styles from './styles.module.css'
@@ -14,20 +12,15 @@ export function LinksRow({ submission }: Props) {
     <div className={styles.linksRow}>
 
       <div className={styles.linksSection}>
-        <span className={styles.colLabel}>Enlla\u00e7os</span>
+        <span className={styles.colLabel}>Links</span>
 
         {submission.dropboxUrl && (
           <div className={styles.linkItem}>
             <i className={`bi bi-dropbox ${styles.linkIcon}`} aria-hidden="true"></i>
-            <a
-              href={submission.dropboxUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.linkAnchor}
-            >
+            <a href={submission.dropboxUrl} target="_blank" rel="noopener noreferrer" className={styles.linkAnchor}>
               Dropbox
             </a>
-            <button className={styles.editBtn} aria-label="Edita">
+            <button className={styles.editBtn} aria-label="Edit">
               <i className="bi bi-pencil" aria-hidden="true"></i>
             </button>
           </div>
@@ -36,15 +29,10 @@ export function LinksRow({ submission }: Props) {
         {submission.projectUrl && (
           <div className={styles.linkItem}>
             <i className={`bi bi-box-arrow-up-right ${styles.linkIcon}`} aria-hidden="true"></i>
-            <a
-              href={submission.projectUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.linkAnchor}
-            >
-              Projecte
+            <a href={submission.projectUrl} target="_blank" rel="noopener noreferrer" className={styles.linkAnchor}>
+              Project URL
             </a>
-            <button className={styles.editBtn} aria-label="Edita">
+            <button className={styles.editBtn} aria-label="Edit">
               <i className="bi bi-pencil" aria-hidden="true"></i>
             </button>
           </div>
@@ -52,12 +40,12 @@ export function LinksRow({ submission }: Props) {
       </div>
 
       <div className={styles.notesSection}>
-        <span className={styles.notesLabel}>Notes internes</span>
+        <span className={styles.notesLabel}>Internal notes</span>
         <textarea
           className={styles.notesTextarea}
           value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          placeholder="Notes internes..."
+          onChange={e => setNotes(e.target.value)}
+          placeholder="Internal notes..."
         />
       </div>
 
