@@ -1,5 +1,5 @@
-// src/modules/submissions/components/Inspector/index.tsx - v0.4.3a
-// Wireframe-compliant layout: 3-col upper row + 2-zone lower row.
+// Inspector/index.tsx - v0.4.3d
+// Panel title: "Ficha de proyecto". Code is a field inside C1.
 import { type MockSubmission } from '../../mockData'
 import { InfoColumn }    from './InfoColumn'
 import { ContactColumn } from './ContactColumn'
@@ -19,7 +19,7 @@ export function Inspector({ submission, onClose, onSelectId }: InspectorProps) {
     <div className={styles.panel}>
 
       <div className={styles.panelHead}>
-        <span className={styles.codeTag}>{submission.code}</span>
+        <span className={styles.panelTitle}>Ficha de proyecto</span>
         <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
           <i className="bi bi-x-lg" aria-hidden="true"></i>
         </button>
@@ -34,7 +34,7 @@ export function Inspector({ submission, onClose, onSelectId }: InspectorProps) {
           <StatusColumn  submission={submission} />
         </div>
 
-        {/* Row 2: links+notes on left, action stack on right */}
+        {/* Row 2: wide links+notes (C4) + narrow action rail (C5) */}
         <div className={styles.lowerRow}>
           <LinksRow    submission={submission} />
           <ActionStack submission={submission} onClose={onClose} />

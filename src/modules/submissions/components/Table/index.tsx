@@ -1,5 +1,5 @@
-// Table/index.tsx - v0.4.3c
-// Canonical spreadsheet column simulation.
+// Table/index.tsx - v0.4.3d
+// 14 canonical columns. Fixed \u2014 literal bug. Real horizontal scroll.
 import { useState } from 'react'
 import { StatusBadge } from '../../../../shared/ui/StatusBadge'
 import { mockSubmissions, type MockSubmission } from '../../mockData'
@@ -14,7 +14,7 @@ interface Props {
 type Dir = 'asc' | 'desc' | null
 interface Sort { col: string; dir: Dir }
 
-const SORTABLE = ['ordre', 'code', 'title', 'category', 'platform', 'payment', 'year']
+const SORTABLE = ['ordre', 'code', 'title', 'category', 'platform', 'payment', 'year', 'price']
 
 function sortData(data: MockSubmission[], sort: Sort): MockSubmission[] {
   if (!sort.dir) return data
@@ -28,14 +28,23 @@ function sortData(data: MockSubmission[], sort: Sort): MockSubmission[] {
       case 'platform': return (a.platform ?? '').localeCompare(b.platform ?? '') * m
       case 'payment':  return a.payment.localeCompare(b.payment) * m
       case 'year':     return (a.year - b.year) * m
+      case 'price':    return (Number(a.price ?? 0) - Number(b.price ?? 0)) * m
       default:         return 0
     }
   })
 }
 
 function SortArrow({ col, sort }: { col: string; sort: Sort }) {
-  if (sort.col !== col || !sort.dir) return <span className={styles.sortNull}>&#8597;</span>
-  return <span className={styles.sortArrow}>{sort.dir === 'asc' ? '\u2191' : '\u2193'}</span>
+  if (sort.col !== col || !sort.dir) return <span className={styles.sortNull}>{'~'}</span>
+  return <span className={styles.sortArrow}>{sort.dir === 'asc' ? '^' : 'v'}</span>
+}
+
+function YN({ val }: { val?: boolean }) {
+  if (val === undefined || val === null)
+    return <span className={styles.cellDim}>{'â€”'}</span>
+  return val
+    ? <span className={styles.ynYes}>Yes</span>
+    : <span className={styles.ynNo}>No</span>
 }
 
 export function SubmissionsTable({ selectedRows, onSelectionChange, onRowClick }: Props) {
@@ -59,32 +68,45 @@ export function SubmissionsTable({ selectedRows, onSelectionChange, onRowClick }
   const toggleRow = (id: string, checked: boolean) =>
     onSelectionChange(checked ? [...selectedRows, id] : selectedRows.filter(i => i !== id))
 
-  const th = (col: string, label: string, align?: string) => (
-    <th
-      className={`${styles.th} ${SORTABLE.includes(col) ? styles.sortable : ''} ${sort.col === col ? styles.sorted : ''}`}
-      style={align ? { textAlign: align as any } : undefined}
-      onClick={SORTABLE.includes(col) ? () => toggleSort(col) : undefined}
-    >
-      {label}{SORTABLE.includes(col) && <SortArrow col={col} sort={sort} />}
-    </th>
-  )
+  function th(col: string, label: string, center?: boolean) {
+    const isSortable = SORTABLE.includes(col)
+    return (
+      <th
+        className={`${styles.th} ${isSortable ? styles.sortable : ''} ${sort.col === col ? styles.sorted : ''} ${center ? styles.thCenter : ''}`}
+        onClick={isSortable ? () => toggleSort(col) : undefined}
+      >
+        {label}
+        {isSortable && <SortArrow col={col} sort={sort} />}
+      </th>
+    )
+  }
 
   return (
     <table className={styles.table}>
       <thead>
         <tr>
           <th className={styles.cbCell}>
-            <input type="checkbox" checked={allSelected} onChange={e => toggleAll(e.target.checked)} />
+            <input
+              type="checkbox"
+              checked={allSelected}
+              onChange={e => toggleAll(e.target.checked)}
+            />
           </th>
-          {th('ordre',    '#',         'right')}
+          {th('ordre',    '#')}
           {th('code',     'Code')}
           {th('title',    'Title')}
           {th('category', 'Category')}
           {th('platform', 'Platform')}
           {th('payment',  'Payment')}
-          <th className={styles.th}>Material</th>
+          <th className={styles.th}>Phys. Mat</th>
+          <th className={styles.th}>Dig. Mat</th>
+          <th className={`${styles.th} ${styles.thCenter}`}>Return</th>
+          <th className={`${styles.th} ${styles.thCenter}`}>Selected</th>
           <th className={styles.th}>Award</th>
-          {th('year',     'Year',      'right')}
+          {th('price',    'Price')}
+          <th className={styles.th}>Name</th>
+          <th className={`${styles.th} ${styles.thCenter}`}>FAD</th>
+          {th('year',     'Year')}
         </tr>
       </thead>
       <tbody>
@@ -107,23 +129,35 @@ export function SubmissionsTable({ selectedRows, onSelectionChange, onRowClick }
               <td className={styles.codeCell}>{row.code}</td>
               <td className={styles.titleCell}>{row.title}</td>
               <td className={styles.catCell}>{row.category}</td>
-              <td className={styles.platCell}>{row.platform ?? '\u2014'}</td>
-              <td>
+              <td className={styles.platCell}>{row.platform ?? ''}</td>
+              <td className={styles.badgeCell}>
                 <StatusBadge status={row.payment === 'ok' ? 'ok' : row.payment === 'pending' ? 'warning' : 'issue'}>
                   {row.payment === 'ok' ? 'Confirmed' : row.payment === 'pending' ? 'Pending' : 'Error'}
                 </StatusBadge>
               </td>
-              <td>
+              <td className={styles.badgeCell}>
                 <StatusBadge status={row.material === 'ok' ? 'ok' : row.material === 'warning' ? 'warning' : 'issue'}>
                   {row.material === 'ok' ? 'Received' : row.material === 'warning' ? 'Pending' : 'Missing'}
                 </StatusBadge>
               </td>
+              <td className={styles.badgeCell}>
+                <StatusBadge status={(row.digitalMat ?? 'ok') === 'ok' ? 'ok' : (row.digitalMat ?? 'ok') === 'warning' ? 'warning' : 'issue'}>
+                  {(row.digitalMat ?? 'ok') === 'ok' ? 'Received' : (row.digitalMat ?? 'ok') === 'warning' ? 'Pending' : 'Missing'}
+                </StatusBadge>
+              </td>
+              <td className={styles.centerCell}><YN val={row.returnMaterial} /></td>
+              <td className={styles.centerCell}><YN val={row.projectSelected} /></td>
               <td className={styles.awardCell}>
                 {row.award
                   ? <span className={styles.awardChip}>{row.award}</span>
-                  : <span className={styles.awardNone}>\u2014</span>
+                  : <span className={styles.cellDim}>{'\u2014'}</span>
                 }
               </td>
+              <td className={styles.priceCell}>
+                {row.price ? `${row.price} \u20AC` : <span className={styles.cellDim}>{'\u2014'}</span>}
+              </td>
+              <td className={styles.nameCell}>{row.firstName} {row.lastName}</td>
+              <td className={styles.centerCell}><YN val={row.fadMember} /></td>
               <td className={styles.yearCell}>{row.year}</td>
             </tr>
           )

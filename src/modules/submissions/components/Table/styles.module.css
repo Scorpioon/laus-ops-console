@@ -1,6 +1,7 @@
-/* Table/styles.module.css - v0.4.3c - spreadsheet simulation */
+/* Table/styles.module.css - v0.4.3d - spreadsheet simulation */
 .table {
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
   font-size: 11.5px;
   table-layout: auto;
@@ -11,7 +12,7 @@
   top: 0;
   z-index: 2;
   text-align: left;
-  padding: 6px 9px;
+  padding: 5px 8px;
   background: var(--bg2);
   color: var(--text3);
   font-weight: 400;
@@ -19,24 +20,30 @@
   text-transform: uppercase;
   letter-spacing: 0.14em;
   border-bottom: 1px solid var(--border2);
+  border-right: 1px solid var(--border3);
   white-space: nowrap;
   user-select: none;
 }
+.th:last-child { border-right: none; }
+
+.thCenter { text-align: center; }
 
 .sortable { cursor: pointer; }
 .sortable:hover { color: var(--text2); }
 .sorted { color: var(--text); }
 
-.sortNull { margin-left: 3px; opacity: 0.3; font-style: normal; }
-.sortArrow { margin-left: 3px; font-style: normal; }
+.sortNull { margin-left: 2px; opacity: 0.25; font-style: normal; font-size: 8px; }
+.sortArrow { margin-left: 2px; font-style: normal; font-size: 8px; }
 
 .table td {
-  padding: 7px 9px;
+  padding: 6px 8px;
   border-bottom: 1px solid var(--border3);
+  border-right: 1px solid var(--border3);
   color: var(--text);
   vertical-align: middle;
   white-space: nowrap;
 }
+.table td:last-child { border-right: none; }
 
 .row { cursor: pointer; transition: background 0.06s; }
 .row:hover { background: var(--hover); }
@@ -46,27 +53,41 @@
 }
 .row.selected td { color: var(--text); }
 
-/* Column widths */
-.cbCell    { width: 30px; text-align: center; padding: 0 8px; }
-.ordreCell { width: 36px; text-align: right; color: var(--text3); font-size: 10px; }
-.codeCell  { width: 72px; font-family: monospace; font-size: 11px; font-weight: 600; color: var(--text2); }
-.titleCell { min-width: 180px; max-width: 320px; overflow: hidden; text-overflow: ellipsis; }
-.catCell   { width: 90px; font-size: 11px; }
-.platCell  { width: 80px; font-size: 11px; color: var(--text2); }
-.yearCell  { width: 50px; text-align: right; color: var(--text3); font-size: 10px; }
+/* ---- Column widths ---- */
+/* Narrow: boolean/short */
+.cbCell     { width: 28px; text-align: center; padding: 0 6px; border-right: 1px solid var(--border3); }
+.ordreCell  { width: 30px; text-align: right; color: var(--text3); font-size: 10px; }
+.centerCell { width: 52px; text-align: center; }
 
-.awardCell { width: 80px; }
-.awardChip {
-  display: inline-flex;
-  align-items: center;
-  font-size: 7.5px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 2px 5px;
-  border-radius: var(--radius);
-  background: #01005D;
-  color: #9694F4;
-  border: 1px solid #9694F4;
+/* Medium */
+.codeCell   { width: 70px; font-family: monospace; font-size: 11px; font-weight: 600; color: var(--text2); }
+.catCell    { width: 80px; }
+.platCell   { width: 70px; color: var(--text2); }
+.badgeCell  { width: 76px; }
+.awardCell  { width: 78px; }
+.priceCell  { width: 58px; text-align: right; color: var(--text2); font-family: monospace; }
+.yearCell   { width: 44px; text-align: right; color: var(--text3); font-size: 10px; }
+.nameCell   { width: 110px; }
+
+/* Long */
+.titleCell  { min-width: 150px; max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---- Misc cell styles ---- */
+.cellDim { color: var(--text3); font-size: 10px; }
+
+.ynYes {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--s-ok);
 }
-.awardNone { color: var(--text3); font-size: 10px; }
+.ynNo {
+  font-size: 8px; font-weight: 400; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--text3);
+}
+
+.awardChip {
+  display: inline-flex; align-items: center;
+  font-size: 7.5px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 2px 5px;
+  border-radius: var(--radius);
+  background: #01005D; color: #9694F4; border: 1px solid #9694F4;
+}
