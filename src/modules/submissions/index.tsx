@@ -1,4 +1,4 @@
-// submissions/index.tsx - v0.4.3e
+// submissions/index.tsx - v0.4.4a (no logic change)
 import { useState } from 'react'
 import { SubmissionsTable } from './components/Table'
 import { Button } from '../../shared/ui/Button'
@@ -53,7 +53,7 @@ export function SubmissionsModule() {
         </div>
       </div>
 
-      {/* Toolbar - system buttons colored in resting state */}
+      {/* Toolbar */}
       <div className="toolbar">
         <div className="toolbar-group">
           <Button variant="icon" title="Refresh" className={styles.toolbarCyan}>

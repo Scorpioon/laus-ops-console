@@ -1,69 +1,138 @@
-/* Table/styles.module.css - v0.4.3e */
+/* Table/styles.module.css - v0.4.4a */
+
+/* Scroll container --------------------------------------------------------- */
+.tableWrap {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  cursor: default;
+  /* Thin custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+.tableWrap::-webkit-scrollbar          { height: 6px; width: 6px; }
+.tableWrap::-webkit-scrollbar-track   { background: transparent; }
+.tableWrap::-webkit-scrollbar-thumb   { background: var(--border2); border-radius: 3px; }
+.tableWrap::-webkit-scrollbar-thumb:hover { background: var(--border); }
+
+/* Applied by JS during drag */
+.grabbing { cursor: grabbing !important; user-select: none; }
+
+/* Table base --------------------------------------------------------------- */
 .table {
   width: max-content;
   min-width: 100%;
   border-collapse: collapse;
-  font-size: 11.5px;
+  font-size: 11px;
   table-layout: auto;
 }
 
+/* Header cells ------------------------------------------------------------- */
 .th {
-  position: sticky; top: 0; z-index: 2;
-  text-align: left; padding: 5px 8px;
-  background: var(--bg2); color: var(--text3);
-  font-weight: 400; font-size: 7.5px;
-  text-transform: uppercase; letter-spacing: 0.14em;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  text-align: left;
+  padding: 5px 8px;
+  background: var(--bg2);
+  color: var(--text3);
+  font-weight: 400;
+  font-size: 7.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
   border-bottom: 1px solid var(--border2);
   border-right: 1px solid var(--border3);
-  white-space: nowrap; user-select: none;
+  white-space: nowrap;
+  user-select: none;
 }
 .th:last-child { border-right: none; }
+
 .thCenter { text-align: center; }
 
+.thContent {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Sort states */
 .sortable { cursor: pointer; }
 .sortable:hover { color: var(--text2); }
-.sorted { color: var(--text); }
-.sortNull  { margin-left: 2px; opacity: 0.25; font-style: normal; font-size: 8px; }
-.sortArrow { margin-left: 2px; font-style: normal; font-size: 8px; }
+.sorted   { color: var(--text); }
+.sortNull  { font-size: 8px; opacity: 0.25; font-style: normal; line-height: 1; }
+.sortArrow { font-size: 8px; font-style: normal; line-height: 1; }
 
+/* Data cells --------------------------------------------------------------- */
 .table td {
   padding: 5px 8px;
   border-bottom: 1px solid var(--border3);
   border-right: 1px solid var(--border3);
-  color: var(--text); vertical-align: middle; white-space: nowrap;
+  color: var(--text);
+  vertical-align: middle;
+  white-space: nowrap;
 }
 .table td:last-child { border-right: none; }
 
+/* Rows */
 .row { cursor: pointer; transition: background 0.06s; }
 .row:hover { background: var(--hover); }
-.row.selected { background: var(--bg3); box-shadow: inset 3px 0 0 var(--text); }
-.row.selected td { color: var(--text); }
+.rowSelected {
+  background: var(--bg3);
+  box-shadow: inset 3px 0 0 var(--text);
+}
+.rowSelected td { color: var(--text); }
 
-/* Column widths */
-.cbCell    { width: 28px; text-align: center; padding: 0 6px; border-right: 1px solid var(--border3); }
-.ordreCell { width: 30px; text-align: right; color: var(--text3); font-size: 10px; }
-.codeCell  { width: 70px; font-family: monospace; font-size: 11px; font-weight: 600; color: var(--text2); }
-.titleCell { min-width: 150px; max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
+/* ---- Sticky columns ------------------------------------------------------- */
+/* col 1: checkbox (left: 0) */
+.sticky1 {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+}
+/* col 2: code (left = width of col 1 = 30px) */
+.sticky2 {
+  position: sticky;
+  left: 30px;
+  z-index: 4;
+  /* Subtle right-border accent to signal sticky boundary */
+  border-right: 2px solid var(--border2) !important;
+}
+
+/* thead sticky cells sit above tbody sticky cells */
+thead .sticky1, thead .sticky2 {
+  z-index: 5;
+  background: var(--bg2);
+}
+
+/* Each sticky td needs an explicit background or it shows through.         */
+/* Applied via JS-driven className (stickyBg / stickyBgSel).               */
+.stickyBg    { background: var(--bg); }
+.stickyBgSel { background: var(--bg3); }
+.row:hover .stickyBg, .row:hover .stickyBgSel { background: var(--hover); }
+
+/* ---- Column widths -------------------------------------------------------- */
+.cbTh      { width: 30px; text-align: center; padding: 0 6px; }
+.cbCell    { width: 30px; text-align: center; padding: 0 6px; }
+.codeCell  { width: 74px; font-family: monospace; font-size: 11px; font-weight: 600; color: var(--text2); }
+.titleCell { min-width: 160px; max-width: 280px; overflow: hidden; text-overflow: ellipsis; }
 .catCell   { width: 80px; }
-.platCell  { width: 70px; color: var(--text2); }
-.badgeCell { width: 78px; }
-.centerCell{ width: 50px; text-align: center; }
-.awardCell { width: 80px; }
-.priceCell { width: 58px; text-align: right; color: var(--text2); font-family: monospace; font-size: 10.5px; }
+.platCell  { width: 74px; color: var(--text2); }
+.badgeCell { width: 72px; }
+.centerCell{ width: 52px; text-align: center; }
+.awardCell { width: 82px; }
+.priceCell { width: 56px; text-align: right; font-family: monospace; font-size: 10.5px; color: var(--text2); }
+.nameCell  { min-width: 110px; max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
 .yearCell  { width: 42px; text-align: right; color: var(--text3); font-size: 10px; }
-.nameCell  { width: 110px; }
 
+/* ---- Cell value helpers --------------------------------------------------- */
 .cellDim { color: var(--text3); }
 
-/* YN: green pastel accent for yes, neutral for no */
-.ynYes { font-size: 8px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #15803D; }
+.ynYes { font-size: 8px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #15803D; }
 .ynNo  { font-size: 8px; font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text3); }
 
-/* Award chip: Senaletica purple pastel */
 .awardChip {
   display: inline-flex; align-items: center;
-  font-size: 7.5px; font-weight: 600; letter-spacing: 0.06em;
-  text-transform: uppercase; padding: 2px 6px;
-  border-radius: var(--radius);
+  font-size: 7.5px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: var(--radius);
   background: #F5F3FF; color: #7C3AED; border: 1px solid #7C3AED33;
 }

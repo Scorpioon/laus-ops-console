@@ -1,4 +1,4 @@
-﻿// Table/index.tsx - v0.4.4a
+// Table/index.tsx - v0.4.4a
 // Sticky checkbox + code. # column removed. All 14 data cols sortable.
 // Drag-to-scroll with proper useEffect cleanup.
 import { useState, useRef, useEffect } from 'react'
@@ -67,52 +67,43 @@ export function SubmissionsTable({ selectedRows, onSelectionChange, onRowClick }
 
   // Drag-to-scroll with proper cleanup
   useEffect(() => {
-  const el = wrapRef.current
-  if (!el) return
+    const el = wrapRef.current
+    if (!el) return
 
-  let isDown = false
-  let startX = 0
-  let scrollLeft = 0
+    let active = false
+    let startX = 0
+    let scrollLeft = 0
 
-  const onDown = (e: MouseEvent) => {
-    const target = e.target as HTMLElement | null
-    if (target?.closest('button, input, a, label, select, textarea')) return
+    function onDown(e: MouseEvent) {
+      // Only trigger on direct clicks (not on checkboxes / buttons)
+      const target = e.target as HTMLElement
+      if (target.closest('button, input, a')) return
+      active = true
+      startX = e.pageX
+      scrollLeft = el.scrollLeft
+      el.classList.add(styles.grabbing)
+    }
+    function onMove(e: MouseEvent) {
+      if (!active) return
+      const dx = (e.pageX - startX) * 1.2
+      el.scrollLeft = scrollLeft - dx
+    }
+    function onUp() {
+      if (!active) return
+      active = false
+      el.classList.remove(styles.grabbing)
+    }
 
-    isDown = true
-    startX = e.pageX
-    scrollLeft = el.scrollLeft
-    el.classList.add(styles.grabbing)
-  }
+    el.addEventListener('mousedown', onDown)
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseup', onUp)
 
-  const onMove = (e: MouseEvent) => {
-    if (!isDown) return
-    e.preventDefault()
-    const dx = e.pageX - startX
-    el.scrollLeft = scrollLeft - dx
-  }
-
-  const onUp = () => {
-    isDown = false
-    el.classList.remove(styles.grabbing)
-  }
-
-  const onLeave = () => {
-    isDown = false
-    el.classList.remove(styles.grabbing)
-  }
-
-  el.addEventListener('mousedown', onDown)
-  window.addEventListener('mousemove', onMove)
-  window.addEventListener('mouseup', onUp)
-  el.addEventListener('mouseleave', onLeave)
-
-  return () => {
-    el.removeEventListener('mousedown', onDown)
-    window.removeEventListener('mousemove', onMove)
-    window.removeEventListener('mouseup', onUp)
-    el.removeEventListener('mouseleave', onLeave)
-  }
-}, [])
+    return () => {
+      el.removeEventListener('mousedown', onDown)
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseup', onUp)
+    }
+  }, [])
 
   const toggleSort = (col: string) =>
     setSort(prev => {

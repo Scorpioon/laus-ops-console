@@ -1,4 +1,4 @@
-/* Submissions.module.css - v0.4.3e */
+/* Submissions.module.css - v0.4.4a */
 
 .submissions {
   display: flex;
@@ -8,6 +8,7 @@
   overflow: hidden;
 }
 
+/* KPI strip ---------------------------------------------------------------- */
 .kpiStrip {
   display: flex;
   align-items: stretch;
@@ -20,6 +21,7 @@
 }
 .kpiStrip::-webkit-scrollbar { display: none; }
 
+/* All KPI cells in equal flow - no detached last item */
 .kpi {
   display: flex;
   flex-direction: column;
@@ -28,7 +30,7 @@
   border-right: 1px solid var(--border2);
   flex-shrink: 0;
 }
-.kpi:last-child { border-right: none; margin-left: auto; }
+.kpi:last-child { border-right: none; }
 
 .kpiVal {
   font-size: 17px;
@@ -46,11 +48,11 @@
   white-space: nowrap;
 }
 
-/* KPI value colors - ADG definitive */
 .kpiWarn { color: #B45309; }
 .kpiOk   { color: #15803D; }
 .kpiDes  { color: #C4294A; }
 
+/* Main layout -------------------------------------------------------------- */
 .mainArea {
   display: flex;
   flex: 1;
@@ -58,20 +60,20 @@
   overflow: hidden;
 }
 
+/* tableContainer must be overflow:hidden so the inner tableWrap controls     */
+/* all horizontal/vertical scroll and sticky positioning works correctly.      */
 .tableContainer {
   flex: 1 1 100%;
-  overflow: auto;
+  overflow: hidden;
   background: var(--bg);
   position: relative;
 }
 
 .tableContainerWithDetail {
   flex: 0 0 50%;
-  overflow: auto;
 }
 
-/* Toolbar colored-resting classes
-   Rule: text=accent / border=accent+#33 / bg=pastel */
+/* Toolbar colored buttons */
 .toolbarCyan  { background: #E0F9FF !important; color: #0885A8 !important; border-color: #0885A833 !important; }
 .toolbarGreen { background: #DCFCE7 !important; color: #15803D !important; border-color: #15803D33 !important; }
 .toolbarRed   { background: #FFF0F6 !important; color: #C4294A !important; border-color: #C4294A33 !important; }
