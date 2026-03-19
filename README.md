@@ -1,5 +1,4 @@
 
-[LAUS_OPS_MASTER_README.md](https://github.com/user-attachments/files/26106146/LAUS_OPS_MASTER_README.md)
 # LAUS OPS CONSOLE
 
 **Internal operational console for LAUS submissions management**  
