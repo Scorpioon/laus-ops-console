@@ -1,7 +1,6 @@
-// src/app.tsx
+// src/app.tsx - v0.4.3f (ModuleTabs removed - was returning null)
 import { useUIStore } from './core/store'
 import { TopBar } from './shared/layout/TopBar'
-import { ModuleTabs } from './shared/layout/ModuleTabs'
 import { Footer } from './shared/layout/Footer'
 import { SubmissionsModule } from './modules/submissions'
 import { JuryModule } from './modules/jury'
@@ -20,15 +19,14 @@ function App() {
   return (
     <div className="app">
       <TopBar />
-      <ModuleTabs />
       <main className="main-content">
         {activeModule === 'submissions' && <SubmissionsModule />}
-        {activeModule === 'jury' && <JuryModule />}
-        {activeModule === 'templates' && <TemplatesModule />}
-        {activeModule === 'insights' && <InsightsModule />}
-        {activeModule === 'helpdesk' && <HelpDeskModule />}
-        {activeModule === 'laurel' && <LaurelModule />}
-        {activeModule === 'settings' && <SettingsModule />}
+        {activeModule === 'jury'        && <JuryModule />}
+        {activeModule === 'templates'   && <TemplatesModule />}
+        {activeModule === 'insights'    && <InsightsModule />}
+        {activeModule === 'helpdesk'    && <HelpDeskModule />}
+        {activeModule === 'laurel'      && <LaurelModule />}
+        {activeModule === 'settings'    && <SettingsModule />}
       </main>
       <Footer />
     </div>

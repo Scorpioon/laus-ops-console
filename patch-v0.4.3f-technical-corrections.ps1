@@ -1,3 +1,70 @@
+#Requires -Version 5.1
+# =============================================================================
+# LAUS OPS CONSOLE - patch v0.4.3f - Technical Correction Pass
+#
+# Apply AFTER v0.4.3c + v0.4.3c-rev1 + v0.4.3d + v0.4.3e (partial).
+# Run from project root:
+#   cd K:\DEVKIT\projects\laus-ops-console\laus-ops-console
+#   .\patch-v0.4.3f-technical-corrections.ps1
+#
+# Files changed (3):
+#   src\modules\submissions\components\Inspector\styles.module.css
+#       PRIMARY: upperGrid flex:1 -> fills panelBody, eliminates empty whitespace
+#       SECONDARY: ADG pastel color system on action btns / badges / toggles
+#   src\modules\settings\components\SettingsPanel.tsx
+#       Mojibake fix: Configuracio, Catala, Exportacio, Silencis, Cancel.la
+#   src\app.tsx
+#       Remove dead ModuleTabs import/usage (returns null, zero visual impact)
+# =============================================================================
+
+Set-StrictMode -Off
+$ErrorActionPreference = 'Stop'
+
+$root = (Get-Location).Path
+
+if (!(Test-Path (Join-Path $root 'package.json'))) {
+    Write-Host ""
+    Write-Host "ERROR: package.json not found in: $root" -ForegroundColor Red
+    Write-Host "Navigate to the project root first." -ForegroundColor Yellow
+    Write-Host ""
+    exit 1
+}
+
+function Write-File {
+    param([string]$Rel, [string]$Content)
+    $full = Join-Path $root $Rel
+    $dir  = Split-Path $full -Parent
+    if (!(Test-Path $dir)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
+    [System.IO.File]::WriteAllText($full, $Content, (New-Object System.Text.UTF8Encoding $false))
+    Write-Host "  OK  $Rel" -ForegroundColor Green
+}
+
+Write-Host ""
+Write-Host "LAUS OPS CONSOLE - patch v0.4.3f" -ForegroundColor Cyan
+Write-Host "Technical Correction Pass" -ForegroundColor Cyan
+Write-Host "Root: $root" -ForegroundColor DarkGray
+Write-Host ""
+
+
+# =============================================================================
+# 01  Inspector\styles.module.css
+#
+# STRUCTURAL FIX:
+#   .upperGrid gains flex:1 (was flex-shrink:0 only).
+#   This makes upperGrid grow to fill all panelBody space not claimed by
+#   lowerRow, eliminating the empty whitespace below the action rail.
+#   The fix chain:
+#     panelBody (flex:1, flex-direction:column)
+#       upperGrid (flex:1)         <- FILLS remaining space
+#       lowerRow  (flex:0 0 auto)  <- stays fixed
+#   Inner columns (infoCol/contactCol/statusCol) keep overflow-y:auto ->
+#   they scroll if content exceeds height.
+#
+# COLOR FIX:
+#   Replace dark neon action buttons/badges/toggles with ADG pastel system.
+#   Same rule as StatusBadge: text=accent / border=accent+#33 / bg=pastel.
+# =============================================================================
+Write-File 'src\modules\submissions\components\Inspector\styles.module.css' @'
 /* Inspector/styles.module.css - v0.4.3f
    STRUCTURAL: upperGrid flex:1 eliminates empty whitespace below lowerRow.
    COLOR: ADG pastel system throughout. */
@@ -415,3 +482,204 @@
 [data-theme="dark"] .actionDescartar { background: var(--s-warn-bg); color: var(--s-warn); border-color: var(--s-warn); }
 [data-theme="dark"] .actionNeutral   { background: var(--bg3); color: var(--text2); border-color: var(--border2); }
 [data-theme="dark"] .actionEliminar  { background: var(--s-des-bg);  color: var(--s-des);  border-color: var(--s-des); }
+'@
+
+
+# =============================================================================
+# 02  src\modules\settings\components\SettingsPanel.tsx
+#     Mojibake fixes only. Logic unchanged.
+#     Configuraci[mojibake]  -> Configuraci\u00f3
+#     Catal[mojibake]        -> Catal\u00e0
+#     Exportaci[mojibake]    -> Exportaci\u00f3
+#     Silenci[mojibake]s     -> Silenci\u00f3s
+#     Cancel[mojibake]la     -> Cancel\u00b7la
+# =============================================================================
+Write-File 'src\modules\settings\components\SettingsPanel.tsx' @'
+// SettingsPanel.tsx - v0.4.3f (mojibake fixed, logic unchanged)
+import { useState } from 'react';
+import { Button } from '../../../shared/ui/Button';
+import { useUIStore } from '../../../core/store/uiStore';
+import styles from './SettingsPanel.module.css';
+
+export const SettingsPanel = () => {
+  const { language, setLanguage, theme, toggleTheme } = useUIStore();
+  const [hasChanges, setHasChanges] = useState(false);
+
+  const [settings, setSettings] = useState({
+    exportFormat: 'clean',
+    laurelEnabled: true,
+    laurelFrequency: 'normal',
+  });
+
+  const handleChange = (key: string, value: any) => {
+    setSettings(prev => ({ ...prev, [key]: value }));
+    setHasChanges(true);
+  };
+
+  const handleApply = () => { setHasChanges(false); };
+
+  const handleCancel = () => {
+    setSettings({ exportFormat: 'clean', laurelEnabled: true, laurelFrequency: 'normal' });
+    setHasChanges(false);
+  };
+
+  return (
+    <div className={styles.settingsPanel}>
+      <h2 className={styles.sectionTitle}>Configuraci\u00f3</h2>
+
+      <div className={styles.section}>
+        <h3>Idioma / Llengua</h3>
+        <div className={styles.optionRow}>
+          <Button
+            variant={language === 'ca' ? 'primary' : 'secondary'}
+            onClick={() => { setLanguage('ca'); setHasChanges(true); }}
+          >
+            Catal\u00e0
+          </Button>
+          <Button
+            variant={language === 'es' ? 'primary' : 'secondary'}
+            onClick={() => { setLanguage('es'); setHasChanges(true); }}
+          >
+            Castellano
+          </Button>
+        </div>
+      </div>
+
+      <div className={styles.section}>
+        <h3>Tema</h3>
+        <div className={styles.optionRow}>
+          <Button
+            variant={theme === 'light' ? 'primary' : 'secondary'}
+            onClick={() => { toggleTheme(); setHasChanges(true); }}
+          >
+            Clar
+          </Button>
+          <Button
+            variant={theme === 'dark' ? 'primary' : 'secondary'}
+            onClick={() => { toggleTheme(); setHasChanges(true); }}
+          >
+            Fosc
+          </Button>
+        </div>
+      </div>
+
+      <div className={styles.section}>
+        <h3>Exportaci\u00f3 per defecte</h3>
+        <div className={styles.optionRow}>
+          <Button
+            variant={settings.exportFormat === 'clean' ? 'primary' : 'secondary'}
+            onClick={() => handleChange('exportFormat', 'clean')}
+          >
+            Net (sense metadades)
+          </Button>
+          <Button
+            variant={settings.exportFormat === 'metadata' ? 'primary' : 'secondary'}
+            onClick={() => handleChange('exportFormat', 'metadata')}
+          >
+            Amb metadades
+          </Button>
+        </div>
+      </div>
+
+      <div className={styles.section}>
+        <h3>Laurel</h3>
+        <div className={styles.optionRow}>
+          <label>
+            <input
+              type="checkbox"
+              checked={settings.laurelEnabled}
+              onChange={(e) => handleChange('laurelEnabled', e.target.checked)}
+            />
+            {' '}Activar
+          </label>
+        </div>
+        {settings.laurelEnabled && (
+          <div className={styles.optionRow}>
+            <select
+              value={settings.laurelFrequency}
+              onChange={(e) => handleChange('laurelFrequency', e.target.value)}
+              className={styles.select}
+            >
+              <option value="often">Sovint</option>
+              <option value="normal">Normal</option>
+              <option value="rare">Rar</option>
+              <option value="muted">Silenci\u00f3s</option>
+            </select>
+          </div>
+        )}
+      </div>
+
+      {hasChanges && (
+        <div className={styles.actionBar}>
+          <Button variant="secondary" onClick={handleCancel}>Cancel\u00b7la</Button>
+          <Button variant="primary" onClick={handleApply}>Aplica</Button>
+        </div>
+      )}
+    </div>
+  );
+};
+'@
+
+
+# =============================================================================
+# 03  src\app.tsx
+#     Remove ModuleTabs import and JSX usage.
+#     ModuleTabs returns null and has no CSS - zero visual or layout impact.
+#     Safe to remove: no other file imports it.
+# =============================================================================
+Write-File 'src\app.tsx' @'
+// src/app.tsx - v0.4.3f (ModuleTabs removed - was returning null)
+import { useUIStore } from './core/store'
+import { TopBar } from './shared/layout/TopBar'
+import { Footer } from './shared/layout/Footer'
+import { SubmissionsModule } from './modules/submissions'
+import { JuryModule } from './modules/jury'
+import { TemplatesModule } from './modules/templates'
+import { InsightsModule } from './modules/insights'
+import { HelpDeskModule } from './modules/helpdesk'
+import { LaurelModule } from './modules/laurel'
+import { SettingsModule } from './modules/settings'
+import { useUnsavedChanges } from './shared/hooks/useUnsavedChanges'
+import './app.css'
+
+function App() {
+  const activeModule = useUIStore((state) => state.activeModule)
+  useUnsavedChanges()
+
+  return (
+    <div className="app">
+      <TopBar />
+      <main className="main-content">
+        {activeModule === 'submissions' && <SubmissionsModule />}
+        {activeModule === 'jury'        && <JuryModule />}
+        {activeModule === 'templates'   && <TemplatesModule />}
+        {activeModule === 'insights'    && <InsightsModule />}
+        {activeModule === 'helpdesk'    && <HelpDeskModule />}
+        {activeModule === 'laurel'      && <LaurelModule />}
+        {activeModule === 'settings'    && <SettingsModule />}
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+export default App
+'@
+
+
+# =============================================================================
+Write-Host ""
+Write-Host "patch v0.4.3f complete - 3 files written." -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Next: npm run dev" -ForegroundColor Yellow
+Write-Host ""
+Write-Host "What changed:" -ForegroundColor DarkGray
+Write-Host "  Inspector/styles   STRUCTURAL: upperGrid flex:1 fills panelBody" -ForegroundColor DarkGray
+Write-Host "                     -> empty whitespace below lowerRow is eliminated" -ForegroundColor DarkGray
+Write-Host "                     -> inner columns keep overflow-y:auto for scroll" -ForegroundColor DarkGray
+Write-Host "                     COLOR: ADG pastel on action btns/badges/toggles" -ForegroundColor DarkGray
+Write-Host "                     (was dark neon from pre-v0.4.3e state)" -ForegroundColor DarkGray
+Write-Host "  SettingsPanel.tsx  Mojibake fixed: Configuracio/Catala/Exportacio" -ForegroundColor DarkGray
+Write-Host "                     Silencis/Cancel.la now use Unicode escapes" -ForegroundColor DarkGray
+Write-Host "  app.tsx            ModuleTabs import/usage removed (was null)" -ForegroundColor DarkGray
+Write-Host ""

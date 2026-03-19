@@ -1,3 +1,4 @@
+// SettingsPanel.tsx - v0.4.3f (mojibake fixed, logic unchanged)
 import { useState } from 'react';
 import { Button } from '../../../shared/ui/Button';
 import { useUIStore } from '../../../core/store/uiStore';
@@ -7,7 +8,6 @@ export const SettingsPanel = () => {
   const { language, setLanguage, theme, toggleTheme } = useUIStore();
   const [hasChanges, setHasChanges] = useState(false);
 
-  // Mock settings state
   const [settings, setSettings] = useState({
     exportFormat: 'clean',
     laurelEnabled: true,
@@ -19,24 +19,16 @@ export const SettingsPanel = () => {
     setHasChanges(true);
   };
 
-  const handleApply = () => {
-    // Here you would persist settings
-    setHasChanges(false);
-  };
+  const handleApply = () => { setHasChanges(false); };
 
   const handleCancel = () => {
-    // Revert changes
-    setSettings({
-      exportFormat: 'clean',
-      laurelEnabled: true,
-      laurelFrequency: 'normal',
-    });
+    setSettings({ exportFormat: 'clean', laurelEnabled: true, laurelFrequency: 'normal' });
     setHasChanges(false);
   };
 
   return (
     <div className={styles.settingsPanel}>
-      <h2 className={styles.sectionTitle}>Configuració</h2>
+      <h2 className={styles.sectionTitle}>Configuraci\u00f3</h2>
 
       <div className={styles.section}>
         <h3>Idioma / Llengua</h3>
@@ -45,7 +37,7 @@ export const SettingsPanel = () => {
             variant={language === 'ca' ? 'primary' : 'secondary'}
             onClick={() => { setLanguage('ca'); setHasChanges(true); }}
           >
-            Català
+            Catal\u00e0
           </Button>
           <Button
             variant={language === 'es' ? 'primary' : 'secondary'}
@@ -75,7 +67,7 @@ export const SettingsPanel = () => {
       </div>
 
       <div className={styles.section}>
-        <h3>Exportació per defecte</h3>
+        <h3>Exportaci\u00f3 per defecte</h3>
         <div className={styles.optionRow}>
           <Button
             variant={settings.exportFormat === 'clean' ? 'primary' : 'secondary'}
@@ -101,7 +93,7 @@ export const SettingsPanel = () => {
               checked={settings.laurelEnabled}
               onChange={(e) => handleChange('laurelEnabled', e.target.checked)}
             />
-            Activar
+            {' '}Activar
           </label>
         </div>
         {settings.laurelEnabled && (
@@ -114,7 +106,7 @@ export const SettingsPanel = () => {
               <option value="often">Sovint</option>
               <option value="normal">Normal</option>
               <option value="rare">Rar</option>
-              <option value="muted">Silenciós</option>
+              <option value="muted">Silenci\u00f3s</option>
             </select>
           </div>
         )}
@@ -122,7 +114,7 @@ export const SettingsPanel = () => {
 
       {hasChanges && (
         <div className={styles.actionBar}>
-          <Button variant="secondary" onClick={handleCancel}>Cancel·la</Button>
+          <Button variant="secondary" onClick={handleCancel}>Cancel\u00b7la</Button>
           <Button variant="primary" onClick={handleApply}>Aplica</Button>
         </div>
       )}
