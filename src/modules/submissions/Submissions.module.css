@@ -1,4 +1,4 @@
-/* Submissions.module.css - v0.4.3c-rev1 */
+/* Submissions.module.css - v0.4.3e */
 
 .submissions {
   display: flex;
@@ -8,7 +8,6 @@
   overflow: hidden;
 }
 
-/* KPI strip ---------------------------------------------------------------- */
 .kpiStrip {
   display: flex;
   align-items: stretch;
@@ -38,7 +37,6 @@
   line-height: 1;
   color: var(--text);
 }
-
 .kpiLbl {
   font-size: 7px;
   letter-spacing: 0.14em;
@@ -48,11 +46,11 @@
   white-space: nowrap;
 }
 
-.kpiWarn { color: var(--s-warn); }
-.kpiOk   { color: var(--s-ok); }
-.kpiDes  { color: var(--s-des); }
+/* KPI value colors - ADG definitive */
+.kpiWarn { color: #B45309; }
+.kpiOk   { color: #15803D; }
+.kpiDes  { color: #C4294A; }
 
-/* Main layout -------------------------------------------------------------- */
 .mainArea {
   display: flex;
   flex: 1;
@@ -69,10 +67,11 @@
 
 .tableContainerWithDetail {
   flex: 0 0 50%;
-  border-right: 1px solid var(--border2);
+  overflow: auto;
 }
 
-.activeToggle {
-  color: var(--s-ok) !important;
-  border-color: var(--s-ok) !important;
-}
+/* Toolbar colored-resting classes
+   Rule: text=accent / border=accent+#33 / bg=pastel */
+.toolbarCyan  { background: #E0F9FF !important; color: #0885A8 !important; border-color: #0885A833 !important; }
+.toolbarGreen { background: #DCFCE7 !important; color: #15803D !important; border-color: #15803D33 !important; }
+.toolbarRed   { background: #FFF0F6 !important; color: #C4294A !important; border-color: #C4294A33 !important; }

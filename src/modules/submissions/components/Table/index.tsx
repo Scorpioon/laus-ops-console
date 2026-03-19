@@ -1,5 +1,5 @@
-// Table/index.tsx - v0.4.3d
-// 14 canonical columns. Fixed \u2014 literal bug. Real horizontal scroll.
+// Table/index.tsx - v0.4.3e
+// Fixed YN mojibake: use JS escape \u2014 (ASCII-safe in PS heredoc).
 import { useState } from 'react'
 import { StatusBadge } from '../../../../shared/ui/StatusBadge'
 import { mockSubmissions, type MockSubmission } from '../../mockData'
@@ -35,13 +35,14 @@ function sortData(data: MockSubmission[], sort: Sort): MockSubmission[] {
 }
 
 function SortArrow({ col, sort }: { col: string; sort: Sort }) {
-  if (sort.col !== col || !sort.dir) return <span className={styles.sortNull}>{'~'}</span>
+  if (sort.col !== col || !sort.dir) return <span className={styles.sortNull}>~</span>
   return <span className={styles.sortArrow}>{sort.dir === 'asc' ? '^' : 'v'}</span>
 }
 
+// \u2014 as JS Unicode escape - always ASCII-safe in PowerShell heredocs
 function YN({ val }: { val?: boolean }) {
   if (val === undefined || val === null)
-    return <span className={styles.cellDim}>{'â€”'}</span>
+    return <span className={styles.cellDim}>{'\u2014'}</span>
   return val
     ? <span className={styles.ynYes}>Yes</span>
     : <span className={styles.ynNo}>No</span>
@@ -103,10 +104,10 @@ export function SubmissionsTable({ selectedRows, onSelectionChange, onRowClick }
           <th className={`${styles.th} ${styles.thCenter}`}>Return</th>
           <th className={`${styles.th} ${styles.thCenter}`}>Selected</th>
           <th className={styles.th}>Award</th>
-          {th('price',    'Price')}
+          {th('price', 'Price')}
           <th className={styles.th}>Name</th>
           <th className={`${styles.th} ${styles.thCenter}`}>FAD</th>
-          {th('year',     'Year')}
+          {th('year', 'Year')}
         </tr>
       </thead>
       <tbody>
@@ -154,7 +155,10 @@ export function SubmissionsTable({ selectedRows, onSelectionChange, onRowClick }
                 }
               </td>
               <td className={styles.priceCell}>
-                {row.price ? `${row.price} \u20AC` : <span className={styles.cellDim}>{'\u2014'}</span>}
+                {row.price
+                  ? `${row.price}\u00a0\u20ac`
+                  : <span className={styles.cellDim}>{'\u2014'}</span>
+                }
               </td>
               <td className={styles.nameCell}>{row.firstName} {row.lastName}</td>
               <td className={styles.centerCell}><YN val={row.fadMember} /></td>

@@ -1,4 +1,4 @@
-// submissions/index.tsx - v0.4.3c
+// submissions/index.tsx - v0.4.3e
 import { useState } from 'react'
 import { SubmissionsTable } from './components/Table'
 import { Button } from '../../shared/ui/Button'
@@ -7,10 +7,10 @@ import { mockSubmissions } from './mockData'
 import styles from './Submissions.module.css'
 
 const kpis = {
-  total:        mockSubmissions.length,
-  payPending:   mockSubmissions.filter(s => s.payment !== 'ok').length,
-  matPending:   mockSubmissions.filter(s => s.material !== 'ok').length,
-  noAward:      mockSubmissions.filter(s => !s.award).length,
+  total:      mockSubmissions.length,
+  payPending: mockSubmissions.filter(s => s.payment !== 'ok').length,
+  matPending: mockSubmissions.filter(s => s.material !== 'ok').length,
+  noAward:    mockSubmissions.filter(s => !s.award).length,
 }
 
 export function SubmissionsModule() {
@@ -18,9 +18,9 @@ export function SubmissionsModule() {
   const [showDetail,   setShowDetail]   = useState(false)
   const [detailId,     setDetailId]     = useState<string | null>(null)
 
-  const handleRowClick  = (id: string) => { setDetailId(id); setShowDetail(true) }
-  const handleSelectId  = (id: string) => { setDetailId(id) }
-  const closeDetail     = () => { setShowDetail(false); setDetailId(null) }
+  const handleRowClick = (id: string) => { setDetailId(id); setShowDetail(true) }
+  const handleSelectId = (id: string) => { setDetailId(id) }
+  const closeDetail    = () => { setShowDetail(false); setDetailId(null) }
 
   const selectedSubmission = detailId
     ? (mockSubmissions.find(s => s.id === detailId) ?? null)
@@ -53,22 +53,45 @@ export function SubmissionsModule() {
         </div>
       </div>
 
-      {/* Toolbar */}
+      {/* Toolbar - system buttons colored in resting state */}
       <div className="toolbar">
         <div className="toolbar-group">
-          <Button variant="icon" title="Refresh"><i className="bi bi-arrow-repeat"></i></Button>
-          <Button variant="icon" title="Import CSV"><i className="bi bi-upload"></i></Button>
-          <Button variant="icon" title="Save session"><i className="bi bi-save"></i></Button>
+          <Button variant="icon" title="Refresh" className={styles.toolbarCyan}>
+            <i className="bi bi-arrow-repeat"></i>
+          </Button>
+          <Button variant="icon" title="Import CSV" className={styles.toolbarGreen}>
+            <i className="bi bi-upload"></i>
+          </Button>
+          <Button variant="icon" title="Save session">
+            <i className="bi bi-save"></i>
+          </Button>
         </div>
         <div className="toolbar-group">
-          <Button variant="icon" title="Remove CSV"><i className="bi bi-file-earmark-x"></i></Button>
-          <Button variant="icon" disabled={selectedRows.length === 0} title="Duplicate"><i className="bi bi-files"></i></Button>
-          <Button variant="icon" disabled={selectedRows.length === 0} title="Delete selected"><i className="bi bi-trash"></i></Button>
+          <Button variant="icon" title="Remove CSV">
+            <i className="bi bi-file-earmark-x"></i>
+          </Button>
+          <Button variant="icon" disabled={selectedRows.length === 0} title="Duplicate selected">
+            <i className="bi bi-files"></i>
+          </Button>
+          <Button
+            variant="icon"
+            disabled={selectedRows.length === 0}
+            title="Delete selected"
+            className={selectedRows.length > 0 ? styles.toolbarRed : ''}
+          >
+            <i className="bi bi-trash"></i>
+          </Button>
         </div>
         <div className="toolbar-group">
-          <Button variant="icon" title="Export"><i className="bi bi-download"></i></Button>
-          <Button variant="icon" title="Filter"><i className="bi bi-funnel"></i></Button>
-          <Button variant="icon" title="Column visibility"><i className="bi bi-layout-three-columns"></i></Button>
+          <Button variant="icon" title="Export">
+            <i className="bi bi-download"></i>
+          </Button>
+          <Button variant="icon" title="Filter">
+            <i className="bi bi-funnel"></i>
+          </Button>
+          <Button variant="icon" title="Column visibility">
+            <i className="bi bi-layout-three-columns"></i>
+          </Button>
         </div>
       </div>
 
