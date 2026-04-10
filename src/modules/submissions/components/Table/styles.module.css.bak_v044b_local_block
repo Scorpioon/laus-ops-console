@@ -1,6 +1,11 @@
 /* Table/styles.module.css - v0.4.4b
    Polish: sticky layering, sort arrows, hover on sticky, scrollbar. */
 
+/* --cb-w: checkbox column width used by both col1 width and col2 left offset */
+:local {
+  --cb-w: 30px;
+}
+
 /* Scroll container --------------------------------------------------------- */
 .tableWrap {
   width: 100%;

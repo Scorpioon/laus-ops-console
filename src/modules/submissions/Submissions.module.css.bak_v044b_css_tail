@@ -78,4 +78,3 @@
 .toolbarCyan  { background: #E0F9FF !important; color: #0885A8 !important; border-color: #0885A833 !important; }
 .toolbarGreen { background: #DCFCE7 !important; color: #15803D !important; border-color: #15803D33 !important; }
 .toolbarRed   { background: #FFF0F6 !important; color: #C4294A !important; border-color: #C4294A33 !important; }
-.toolbarAmber { background: #FFF7ED !important; color: #B45309 !important; border-color: #B4530933 !important; }
