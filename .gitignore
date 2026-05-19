@@ -24,3 +24,20 @@ yarn-error.log*
 
 # debug files
 *.tsbuildinfo
+
+# ---------------------------------------------------------------------------
+# PANOPTES GRC private-by-default cleanup - laus-ops-console - v0.1c-D3
+# Licensed/local-only assets must not be tracked publicly.
+# ---------------------------------------------------------------------------
+
+public/fonts/NeueHaasUnicaPro-Bold.woff2
+desktop.ini
+_old/
+**/_old/
+_tmp/
+reports/
+*.bak
+*.tmp
+*.log
+__pycache__/
+*.pyc
